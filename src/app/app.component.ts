@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { DeviceManagerService } from './services/deviceManager.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +9,9 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'PlayChatUI';
+
+
+  constructor(private deviceManager: DeviceManagerService) {
+
+  }
 }
