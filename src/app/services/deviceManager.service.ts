@@ -55,21 +55,42 @@ export class DeviceManagerService {
 
   private updateMediaDevices() {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
+      let defaultAudioInput = '';
+      let defaultComsAudioInput = '';
+      let defaultAudioOutput = '';
+      let defaultComsAudioOutput = '';
       for (const device of devices) {
-        if (device.kind == 'videoinput') {
+        if (device.kind === 'videoinput') {
           this.videoDevices.set(device.deviceId, new VideoDeviceInfo(device));
         } else {
-
-          if (device.kind == 'audioinput') {
-            this.audioInputDevices.set(device.deviceId, new AudioDeviceInfo(device));
-          } else if (device.kind == 'audiooutput') {
-            this.audioOutputDevices.set(device.deviceId, new AudioDeviceInfo(device));
+          let deviceMap: Map<string, AudioDeviceInfo>;
+          let defaultAudio: string;
+          let defaultComsAudio: string;
+          if (device.kind === 'audioinput') {
+            deviceMap = this.audioInputDevices;
+            defaultAudio = defaultAudioInput;
+            defaultComsAudio = defaultComsAudioInput;
+          } else if (device.kind === 'audiooutput') {
+            deviceMap = this.audioOutputDevices;
+            defaultAudio = defaultAudioOutput;
+            defaultComsAudio = defaultComsAudioOutput;
+          }
+          if (device.deviceId === 'default') {
+            defaultAudio = device.label.substr(('Default - ').length);
+          } else if (device.deviceId === 'communications') {
+            defaultComsAudio = device.label.substr(('Communications - ').length);
+          } else {
+            deviceMap.set(device.deviceId, new AudioDeviceInfo(device))
           }
         }
       }
     });
   }
 
+  private checkExistingForDefaults(device: MediaDeviceInfo) {
+
+
+  }
 
   public getVideoDeviceInfo = () => [...this.videoDevices.values()];
   public getAudioInputDeviceInfo = () => [...this.audioInputDevices.values()];

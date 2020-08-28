@@ -18,10 +18,12 @@ export class DeviceInfo {
 		return this.communicationDefault;
 	}
 
+	public readonly deviceLabel: string;
 	public readonly deviceName: string;
 	public readonly deviceId: string;
 
 	constructor(private mediaDeviceInfo: MediaDeviceInfo) {
+		this.deviceLabel = mediaDeviceInfo.label;
 		this.deviceName = this.parseDeviceName(mediaDeviceInfo.label);
 		this.deviceId = mediaDeviceInfo.deviceId;
 	}
