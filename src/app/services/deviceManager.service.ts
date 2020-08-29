@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { AudioDeviceInfo, VideoDeviceInfo } from './mediaDevices'
+import { AudioDeviceInfo, VideoDeviceInfo } from './mediaDevices';
+import '../extensions';
 
 
 @Injectable({
@@ -55,41 +56,43 @@ export class DeviceManagerService {
 
   private updateMediaDevices() {
     navigator.mediaDevices.enumerateDevices().then((devices) => {
-      let defaultAudioInput = '';
-      let defaultComsAudioInput = '';
-      let defaultAudioOutput = '';
-      let defaultComsAudioOutput = '';
+      const audioInputs: MediaDeviceInfo[] = [];
+      const audioOutputs: MediaDeviceInfo[] = [];
+
       for (const device of devices) {
         if (device.kind === 'videoinput') {
           this.videoDevices.set(device.deviceId, new VideoDeviceInfo(device));
-        } else {
-          let deviceMap: Map<string, AudioDeviceInfo>;
-          let defaultAudio: string;
-          let defaultComsAudio: string;
-          if (device.kind === 'audioinput') {
-            deviceMap = this.audioInputDevices;
-            defaultAudio = defaultAudioInput;
-            defaultComsAudio = defaultComsAudioInput;
-          } else if (device.kind === 'audiooutput') {
-            deviceMap = this.audioOutputDevices;
-            defaultAudio = defaultAudioOutput;
-            defaultComsAudio = defaultComsAudioOutput;
+        } else if (device.kind === 'audioinput') {
+          audioInputs.push(device);
+          if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
+            this.audioInputDevices.set(device.deviceId, new AudioDeviceInfo(device));
           }
-          if (device.deviceId === 'default') {
-            defaultAudio = device.label.substr(('Default - ').length);
-          } else if (device.deviceId === 'communications') {
-            defaultComsAudio = device.label.substr(('Communications - ').length);
-          } else {
-            deviceMap.set(device.deviceId, new AudioDeviceInfo(device))
+        } else if (device.kind === 'audiooutput') {
+          audioOutputs.push(device);
+          if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
+            this.audioOutputDevices.set(device.deviceId, new AudioDeviceInfo(device));
           }
         }
       }
+      this.setDefaultInputDevice(audioInputs);
+      this.setDefaultOutputDevice(audioOutputs);
     });
   }
 
-  private checkExistingForDefaults(device: MediaDeviceInfo) {
+  private setDefaultInputDevice(devices: MediaDeviceInfo[]) {
+    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default -'.length - 1);
+    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications -'.length - 1);
 
+    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultDevice).first()[1].isDefault = true;
+    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).first()[1].isCommunicationDefault = true;
+  }
 
+  private setDefaultOutputDevice(devices: MediaDeviceInfo[]) {
+    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default -'.length);
+    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications -'.length);
+
+    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultDevice).first();
+    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).first()[1].isCommunicationDefault = true;
   }
 
   public getVideoDeviceInfo = () => [...this.videoDevices.values()];
