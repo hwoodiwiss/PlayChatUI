@@ -4,7 +4,7 @@ declare global {
 	export interface Map<K, V> {
 		where(predicate: (key: K, val: V) => boolean): Map<K, V>
 		select<T>(predicate: (key: K, val: V) => T): Array<T>
-		first(predicate?: (key: K, val: V) => boolean): [K, V] | undefined
+		first(predicate?: (key: K, val: V) => boolean): { key: K, value: V } | undefined
 	}
 }
 
@@ -26,14 +26,14 @@ Map.prototype.select = function <K, V, T>(this: Map<K, V>, predicate: (key: K, v
 	return result;
 }
 
-Map.prototype.first = function <K, V>(this: Map<K, V>, predicate?: (key: K, val: V | [K, V]) => boolean): [K, V] {
+Map.prototype.first = function <K, V>(this: Map<K, V>, predicate?: (key: K, val: V | [K, V]) => boolean): { key: K, value: V } | undefined {
 	for (const item of this) {
-		if (predicate !== null) {
+		if (predicate) {
 			if (predicate(item[0], item[1])) {
-				return item;
+				return { key: item[0], value: item[1] };
 			}
 		} else {
-			return item;
+			return { key: item[0], value: item[1] };
 		}
 	}
 	return null;

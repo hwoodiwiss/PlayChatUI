@@ -28,7 +28,7 @@ Array.prototype.select = function <T, TResult>(this: Array<T>, predicate: (val: 
 
 Array.prototype.first = function <T>(this: Array<T>, predicate?: (val: T) => boolean): T | undefined {
 	for (const item of this) {
-		if (predicate !== null) {
+		if (predicate) {
 			if (predicate(item)) {
 				return item;
 			}

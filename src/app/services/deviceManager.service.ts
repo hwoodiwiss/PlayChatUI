@@ -80,19 +80,19 @@ export class DeviceManagerService {
   }
 
   private setDefaultInputDevice(devices: MediaDeviceInfo[]) {
-    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default -'.length - 1);
-    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications -'.length - 1);
+    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default - '.length);
+    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications - '.length);
 
-    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultDevice).first()[1].isDefault = true;
-    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).first()[1].isCommunicationDefault = true;
+    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultDevice).select((k, v) => v.isDefault = true);
+    this.audioInputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).select((k, v) => v.isCommunicationDefault = true);
   }
 
   private setDefaultOutputDevice(devices: MediaDeviceInfo[]) {
-    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default -'.length);
-    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications -'.length);
+    const defaultDevice = devices.where(w => w.deviceId === 'default').select(s => s.label).first().substr('Default - '.length);
+    const defaultComsDevice = devices.where(w => w.deviceId === 'communications').select(s => s.label).first().substr('Communications - '.length);
 
-    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultDevice).first();
-    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).first()[1].isCommunicationDefault = true;
+    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultDevice).select((k, v) => v.isDefault = true);
+    this.audioOutputDevices.where((w, s) => s.deviceLabel == defaultComsDevice).select((k, v) => v.isCommunicationDefault = true);
   }
 
   public getVideoDeviceInfo = () => [...this.videoDevices.values()];
