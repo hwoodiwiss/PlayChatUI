@@ -34,11 +34,11 @@ export class DeviceInfo {
 
 }
 
-export class VideoDeviceInfo extends DeviceInfo {
+export class VideoDevice extends DeviceInfo {
 
 }
 
-export class AudioDeviceInfo extends DeviceInfo {
+export class AudioDevice extends DeviceInfo {
 
 }
 

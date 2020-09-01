@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { DeviceManagerService } from './services/deviceManager.service';
+import { DeviceManagerService } from './services/DeviceManager/deviceManager.service';
 
 @Component({
   selector: 'app-root',

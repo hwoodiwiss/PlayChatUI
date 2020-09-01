@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DeviceManagerService } from '../services/deviceManager.service';
+import { DeviceManagerService } from '../services/DeviceManager/deviceManager.service';
 
 @Component({
   selector: 'app-meeting',

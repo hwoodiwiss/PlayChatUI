@@ -1,7 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { CookiesModule } from 'angular-cookies'
 
-import { DeviceManagerService } from './services/deviceManager.service';
+import { DeviceManagerService } from './services/DeviceManager/deviceManager.service';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -14,7 +15,8 @@ import { MeetingComponent } from './meeting/meeting.component';
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    CookiesModule
   ],
   providers: [],
   bootstrap: [AppComponent]
