@@ -5,13 +5,10 @@ import { DeviceManagerService } from './services/DeviceManager/deviceManager.ser
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
   title = 'PlayChatUI';
 
-
-  constructor(private deviceManager: DeviceManagerService) {
-
-  }
+  constructor(private deviceManager: DeviceManagerService) {}
 }
