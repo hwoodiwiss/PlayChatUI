@@ -10,6 +10,31 @@ trigger:
   - master
 
 stages:
+  - stage: Test
+    jobs:
+      - job: test
+        container: node
+        steps:
+          - checkout: self
+            clean: true
+            displayName: Checkout Source
+          - script: yarn install --frozen-lockfile
+            displayName: Install using yarn with frozen lockfile
+          - script: yarn test
+            displayName: Run Unit Tests
+          - task: PublishTestResults@2
+            condition: succeededOrFailed()
+            inputs:
+              testRunner: JUnit
+              testResultsFiles: "**/junit.xml"
+            displayName: Publish Test Result
+          - task: PublishCodeCoverageResults@1
+            condition: succeededOrFailed()
+            inputs:
+              codeCoverageTool: "cobertura"
+              summaryFileLocation: "**/cobertura-coverage.xml"
+            displayName: Publish Test Coverage
+
   - stage: Build
     jobs:
       - job: build

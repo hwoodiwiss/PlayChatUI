@@ -10,5 +10,5 @@ import { DeviceManagerService } from './services/DeviceManager/deviceManager.ser
 export class AppComponent {
   title = 'PlayChatUI';
 
-  constructor(private deviceManager: DeviceManagerService) {}
+  constructor() {}
 }
