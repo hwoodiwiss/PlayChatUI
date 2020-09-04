@@ -1,3 +1,5 @@
+[![Build Status](https://secronz.visualstudio.com/PlayChat/_apis/build/status/hwoodiwiss.PlayChatUI?branchName=master)](https://secronz.visualstudio.com/PlayChat/_build/latest?definitionId=1&branchName=master)
+
 # PlayChatUI
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 10.0.1.
