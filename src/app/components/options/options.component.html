@@ -8,10 +8,11 @@
   </option>
 </select>
 
-<select>
+<select [(ngModel)]="selectedAudioOutputId">
   <option
     *ngFor="let device of getAudioOutputDevices()"
     value="{{ device.deviceId }}"
+    [ngValue]="device.deviceId"
     [selected]="device.deviceId === getCurrentAudioOutputDevice().deviceId"
   >
     {{ device.deviceName }}

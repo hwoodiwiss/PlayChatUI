@@ -8,6 +8,8 @@ import { AudioDevice } from 'src/app/services/DeviceManager/mediaDevices';
   styleUrls: ['./options.component.scss'],
 })
 export class OptionsComponent implements OnInit {
+  selectedAudioOutputId: string;
+
   constructor(private deviceManager: DeviceManagerService) {}
 
   ngOnInit(): void {}
@@ -19,6 +21,8 @@ export class OptionsComponent implements OnInit {
 
   getAudioOutputDevices = () => this.deviceManager.getAudioOutputDeviceInfo();
   getCurrentAudioOutputDevice(): AudioDevice {
+    console.log(this.deviceManager.CurrentAudioOutputDevice);
     return this.deviceManager.CurrentAudioOutputDevice;
   }
+  updateCurrentAudioOutputDevice() {}
 }

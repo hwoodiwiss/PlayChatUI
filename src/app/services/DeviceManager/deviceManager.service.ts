@@ -26,6 +26,13 @@ export class DeviceManagerService {
   public get CurrentAudioOutputDevice(): AudioDevice {
     return this.currentAudioOutputDevice;
   }
+  public set CurrentAudioOutputDevice(device: AudioDevice) {
+    this.configurationService.getConfiguration().then((config) => {
+      config.audioOutputId = device?.deviceId;
+      this.configurationService.updateConfig();
+    });
+    this.currentAudioOutputDevice = device;
+  }
 
   constructor(private configurationService: ConfigurationService) {
     this.ensureDevicePermissions()
@@ -175,4 +182,11 @@ export class DeviceManagerService {
   public getVideoDeviceInfo = () => [...this.videoDevices.values()];
   public getAudioInputDeviceInfo = () => [...this.audioInputDevices.values()];
   public getAudioOutputDeviceInfo = () => [...this.audioOutputDevices.values()];
+
+  public setCurrentAudioOutput(deviceId: string): void {
+    const device = this.audioOutputDevices.first(
+      (k, v) => v.deviceId === deviceId
+    )?.value;
+    this.CurrentAudioOutputDevice = device;
+  }
 }
