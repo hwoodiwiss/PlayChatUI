@@ -23,6 +23,7 @@ stages:
           - script: yarn build
             displayName: Build dev using yarn
           - task: PublishPipelineArtifact@1
+            displayName: Publish Dev Build
             inputs:
               targetPath: "$(System.DefaultWorkingDirectory)/dist/PlayChatUI"
               artifact: dist-dev
@@ -30,6 +31,7 @@ stages:
           - script: yarn build:prod
             displayName: Build production using yarn
           - task: PublishPipelineArtifact@1
+            displayName: Publish Prod Build
             inputs:
               targetPath: "$(System.DefaultWorkingDirectory)/dist/PlayChatUI"
               artifact: dist-prod
