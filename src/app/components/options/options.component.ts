@@ -24,5 +24,4 @@ export class OptionsComponent implements OnInit {
     console.log(this.deviceManager.CurrentAudioOutputDevice);
     return this.deviceManager.CurrentAudioOutputDevice;
   }
-  updateCurrentAudioOutputDevice() {}
 }
