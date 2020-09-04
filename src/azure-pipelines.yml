@@ -5,6 +5,9 @@ resources:
     - container: node
       image: node:10
 
+trigger:
+  - master
+
 stages:
   - stage: Build
     jobs:
