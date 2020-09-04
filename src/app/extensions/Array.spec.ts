@@ -20,6 +20,18 @@ describe('Array', () => {
     expect(result).toEqual('mi');
   });
 
+  it('first should return undefined if there are no values', () => {
+    const array = [];
+    const result = array.first();
+    expect(result).toEqual(undefined);
+  });
+
+  it('first should return undefined if no items match the predicate', () => {
+    const array = ['doe', 'ray', 'mi', 'fah', 'so', 'latte'];
+    const result = array.first((w) => w.length === 15);
+    expect(result).toEqual(undefined);
+  });
+
   it('select should return an array of the values returned by the passed predicate', () => {
     const array = ['doe', 'ray', 'mi', 'fah', 'so', 'latte'];
     const result = array.select((s) => s.length);

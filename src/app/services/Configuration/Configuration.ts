@@ -1,5 +1,5 @@
-export class Configuration {
-  public videoDeviceId: string;
-  public audioInputId: string;
-  public audioOutputId: string;
+export interface Configuration {
+  videoDeviceId?: string;
+  audioInputId?: string;
+  audioOutputId?: string;
 }

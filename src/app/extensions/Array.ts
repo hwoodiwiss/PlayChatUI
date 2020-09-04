@@ -8,10 +8,7 @@ declare global {
   }
 }
 
-Array.prototype.where = function <T>(
-  this: Array<T>,
-  predicate: (val: T) => boolean
-): Array<T> {
+Array.prototype.where = function <T>(this: Array<T>, predicate: (val: T) => boolean): Array<T> {
   const resultArray = new Array<T>();
   for (const item of this) {
     if (predicate(item)) {
@@ -21,10 +18,7 @@ Array.prototype.where = function <T>(
   return resultArray;
 };
 
-Array.prototype.select = function <T, TResult>(
-  this: Array<T>,
-  predicate: (val: T) => TResult
-): Array<TResult> {
+Array.prototype.select = function <T, TResult>(this: Array<T>, predicate: (val: T) => TResult): Array<TResult> {
   const result = new Array<TResult>();
   for (const item of this) {
     result.push(predicate(item));
@@ -32,10 +26,7 @@ Array.prototype.select = function <T, TResult>(
   return result;
 };
 
-Array.prototype.first = function <T>(
-  this: Array<T>,
-  predicate?: (val: T) => boolean
-): T | undefined {
+Array.prototype.first = function <T>(this: Array<T>, predicate?: (val: T) => boolean): T | undefined {
   for (const item of this) {
     if (predicate) {
       if (predicate(item)) {
@@ -45,5 +36,4 @@ Array.prototype.first = function <T>(
       return item;
     }
   }
-  return null;
 };

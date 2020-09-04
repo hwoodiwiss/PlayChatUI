@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Configuration } from './Configuration';
 
-const CFG_KEY = 'pc-config';
+export const CFG_KEY = 'pc-config';
 
 @Injectable({
   providedIn: 'root',
@@ -32,22 +32,16 @@ export class ConfigurationService {
       }
     }
 
-    return new Configuration();
+    return {};
   }
 
   public updateConfig(): void {
     if (!this.config) {
-      this.config = new Configuration();
+      this.config = {};
     }
 
     const configJson = JSON.stringify(this.config);
     const encodedConfig = btoa(configJson);
     localStorage.setItem(CFG_KEY, encodedConfig);
-  }
-}
-
-export class ConfigurationError extends Error {
-  constructor(message: string) {
-    super(message);
   }
 }

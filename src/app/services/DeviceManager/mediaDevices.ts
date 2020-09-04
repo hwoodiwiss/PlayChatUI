@@ -4,7 +4,7 @@ export class DeviceInfo {
   public set isDefault(value: boolean) {
     this.default = value;
   }
-  public get isDefault() {
+  public get isDefault(): boolean {
     return this.default;
   }
 
@@ -13,7 +13,7 @@ export class DeviceInfo {
   public set isCommunicationDefault(value: boolean) {
     this.communicationDefault = value;
   }
-  public get isCommunicationDefault() {
+  public get isCommunicationDefault(): boolean {
     return this.communicationDefault;
   }
 
@@ -27,7 +27,7 @@ export class DeviceInfo {
     this.deviceId = mediaDeviceInfo.deviceId;
   }
 
-  parseDeviceName(deviceName: string) {
+  parseDeviceName(deviceName: string): string {
     return deviceName.replace(/\([0-9a-fA-F]{4}:[0-9a-fA-F]{4}\)/g, '').trim();
   }
 }

@@ -35,17 +35,20 @@ describe('Map', () => {
     expect(result).toEqual({ key: 3, value: 'three' });
   });
 
+  it('first should return undefined if the Map is empty', () => {
+    map.clear();
+    const result = map.first((k, v) => k > 2);
+    expect(result).toEqual(undefined);
+  });
+
+  it('first should return undefined if no items match the predicate', () => {
+    const result = map.first((k, v) => k > 7);
+    expect(result).toEqual(undefined);
+  });
+
   it('select should return an array of the values returned by the passed predicate', () => {
     const result = map.select((k, v) => `${k}. ${v}`);
     expect(result).toHaveLength(7);
-    expect(result).toEqual([
-      '1. one',
-      '2. two',
-      '3. three',
-      '4. four',
-      '5. five',
-      '6. six',
-      '7. seven',
-    ]);
+    expect(result).toEqual(['1. one', '2. two', '3. three', '4. four', '5. five', '6. six', '7. seven']);
   });
 });

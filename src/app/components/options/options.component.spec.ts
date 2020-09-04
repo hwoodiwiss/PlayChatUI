@@ -7,16 +7,18 @@ import { DeviceManagerService } from '../../services/DeviceManager/deviceManager
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
   let fixture: ComponentFixture<OptionsComponent>;
-  const mockDeviceManager = {
-    getVideoDeviceInfo: jest.fn(),
-    getAudioInputDeviceInfo: jest.fn(),
-    getAudioOutputDeviceInfo: jest.fn(),
-    CurrentAudioInputDevice: null,
-    CurrentAudioOutputDevice: null,
-    CurrentVideoDevice: null,
-  };
+  let mockDeviceManager;
 
   beforeEach(() => {
+    mockDeviceManager = {
+      getVideoDeviceInfo: jest.fn(),
+      getAudioInputDeviceInfo: jest.fn(),
+      getAudioOutputDeviceInfo: jest.fn(),
+      CurrentAudioInputDevice: null,
+      CurrentAudioOutputDevice: null,
+      CurrentVideoDevice: null,
+    };
+
     TestBed.configureTestingModule({
       declarations: [OptionsComponent],
       imports: [FormsModule],
@@ -34,5 +36,29 @@ describe('OptionsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('getAudioInputDevices will return deviceManager getAudioInputDeviceInfo', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.getAudioInputDeviceInfo.mockReturnValue(expectedValue);
+    expect(component.getAudioInputDevices()).toBe(expectedValue);
+  });
+
+  it('getAudioOutputDevices will return deviceManager getAudioOutputDeviceInfo', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.getAudioOutputDeviceInfo.mockReturnValue(expectedValue);
+    expect(component.getAudioOutputDevices()).toBe(expectedValue);
+  });
+
+  it('getCurrentAudioInputDevice will return deviceManager CurrentAudioInputDevice', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.CurrentAudioInputDevice = expectedValue;
+    expect(component.getCurrentAudioInputDevice()).toBe(expectedValue);
+  });
+
+  it('getCurrentAudioOutputDevice will return deviceManager CurrentAudioOutputDevice', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.CurrentAudioOutputDevice = expectedValue;
+    expect(component.getCurrentAudioOutputDevice()).toBe(expectedValue);
   });
 });

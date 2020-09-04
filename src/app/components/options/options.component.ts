@@ -15,13 +15,8 @@ export class OptionsComponent implements OnInit {
   ngOnInit(): void {}
 
   getAudioInputDevices = () => this.deviceManager.getAudioInputDeviceInfo();
-  getCurrentAudioInputDevice(): AudioDevice {
-    return this.deviceManager.CurrentAudioInputDevice;
-  }
+  getCurrentAudioInputDevice = () => this.deviceManager.CurrentAudioInputDevice;
 
   getAudioOutputDevices = () => this.deviceManager.getAudioOutputDeviceInfo();
-  getCurrentAudioOutputDevice(): AudioDevice {
-    console.log(this.deviceManager.CurrentAudioOutputDevice);
-    return this.deviceManager.CurrentAudioOutputDevice;
-  }
+  getCurrentAudioOutputDevice = () => this.deviceManager.CurrentAudioOutputDevice;
 }
