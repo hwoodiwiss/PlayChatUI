@@ -33,7 +33,7 @@ stages:
             inputs:
               codeCoverageTool: "cobertura"
               summaryFileLocation: "**/cobertura-coverage.xml"
-            displayName: Publish Test Coverage
+            displayName: Publish Test Coverage Report
 
       - job: Build
         container: node
