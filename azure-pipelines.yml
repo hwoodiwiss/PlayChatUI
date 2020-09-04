@@ -28,6 +28,12 @@ stages:
               testRunner: JUnit
               testResultsFiles: "**/junit.xml"
             displayName: Publish Test Result
+          - task: UseDotNet@2
+            condition: succeededOrFailed()
+            inputs:
+              packageType: sdk
+              version: 3.x
+            displayName: Install Dotnet For Coverage Report
           - task: PublishCodeCoverageResults@1
             condition: succeededOrFailed()
             inputs:
