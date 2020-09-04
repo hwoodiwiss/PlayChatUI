@@ -10,7 +10,7 @@ trigger:
   - master
 
 stages:
-  - stage: Build
+  - stage: Unit Test
     jobs:
       - job: Test
         container: node
@@ -41,9 +41,10 @@ stages:
               summaryFileLocation: "**/cobertura-coverage.xml"
             displayName: Publish Test Coverage Report
 
+  - stage: Build
+    jobs:
       - job: Build
         container: node
-        condition: succeeded()
         steps:
           - checkout: self
             clean: true
