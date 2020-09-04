@@ -13,8 +13,19 @@ export class DeviceManagerService {
   private errors: string[] = [];
 
   private currentVideoDevice: VideoDevice;
-  private currentAudioInputDevice: VideoDevice;
-  private currentAudioOutputDevice: VideoDevice;
+  public get CurrentVideoDevice(): VideoDevice {
+    return this.currentVideoDevice;
+  }
+
+  private currentAudioInputDevice: AudioDevice;
+  public get CurrentAudioInputDevice(): AudioDevice {
+    return this.currentAudioInputDevice;
+  }
+
+  private currentAudioOutputDevice: AudioDevice;
+  public get CurrentAudioOutputDevice(): AudioDevice {
+    return this.currentAudioOutputDevice;
+  }
 
   constructor(private configurationService: ConfigurationService) {
     this.ensureDevicePermissions()
@@ -112,21 +123,21 @@ export class DeviceManagerService {
         }
 
         if (!this.currentVideoDevice) {
-          this.currentVideoDevice = this.videoDevices.first().value;
+          this.currentVideoDevice = this.videoDevices.first()?.value;
         }
 
         if (!this.currentAudioInputDevice) {
           this.currentAudioInputDevice =
             this.audioInputDevices.first(
               (k, v) => v.isCommunicationDefault === true
-            )?.value ?? this.audioInputDevices.first().value;
+            )?.value ?? this.audioInputDevices.first()?.value;
         }
 
         if (!this.currentAudioOutputDevice) {
           this.currentAudioOutputDevice =
             this.audioOutputDevices.first(
               (k, v) => v.isCommunicationDefault === true
-            )?.value ?? this.audioOutputDevices.first().value;
+            )?.value ?? this.audioOutputDevices.first()?.value;
         }
       });
     });

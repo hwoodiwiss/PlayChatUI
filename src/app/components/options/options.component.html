@@ -1,1 +1,19 @@
+<select>
+  <option
+    *ngFor="let device of getAudioInputDevices()"
+    value="{{ device.deviceId }}"
+    [selected]="device.deviceId === getCurrentAudioInputDevice().deviceId"
+  >
+    {{ device.deviceName }}
+  </option>
+</select>
 
+<select>
+  <option
+    *ngFor="let device of getAudioOutputDevices()"
+    value="{{ device.deviceId }}"
+    [selected]="device.deviceId === getCurrentAudioOutputDevice().deviceId"
+  >
+    {{ device.deviceName }}
+  </option>
+</select>
