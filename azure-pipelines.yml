@@ -10,7 +10,7 @@ trigger:
   - master
 
 stages:
-  - stage: Unit Test
+  - stage: Unit_Test
     jobs:
       - job: Test
         container: node
