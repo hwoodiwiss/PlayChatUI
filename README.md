@@ -20,7 +20,7 @@ Run `ng test` to execute the unit tests via [Jest](https://github.com/facebook/j
 
 ## Running end-to-end tests
 
-Run `ng e2e` to execute the end-to-end tests via [Playwright](https://wplaywright.dev/).
+Run `ng e2e` to execute the end-to-end tests via [Playwright](https://playwright.dev/).
 
 ## Further help
 
