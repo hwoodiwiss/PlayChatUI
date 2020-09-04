@@ -1,26 +1,32 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
 
 import { OptionsComponent } from './options.component';
-import { DeviceManagerService } from 'src/app/services/DeviceManager/deviceManager.service';
+import { DeviceManagerService } from '../../services/DeviceManager/deviceManager.service';
 
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
   let fixture: ComponentFixture<OptionsComponent>;
-  const mockDeviceManager = {};
+  const mockDeviceManager = {
+    getVideoDeviceInfo: jest.fn(),
+    getAudioInputDeviceInfo: jest.fn(),
+    getAudioOutputDeviceInfo: jest.fn(),
+    CurrentAudioInputDevice: null,
+    CurrentAudioOutputDevice: null,
+    CurrentVideoDevice: null,
+  };
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [OptionsComponent],
+      imports: [FormsModule],
       providers: [
         {
           provide: DeviceManagerService,
-          fromValue: mockDeviceManager,
+          useFactory: () => mockDeviceManager,
         },
       ],
     }).compileComponents();
-  }));
-
-  beforeEach(() => {
     fixture = TestBed.createComponent(OptionsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
