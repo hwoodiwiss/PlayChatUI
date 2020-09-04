@@ -10,9 +10,9 @@ trigger:
   - master
 
 stages:
-  - stage: Test
+  - stage: Build
     jobs:
-      - job: test
+      - job: Test
         container: node
         steps:
           - checkout: self
@@ -33,11 +33,9 @@ stages:
             inputs:
               codeCoverageTool: "cobertura"
               summaryFileLocation: "**/cobertura-coverage.xml"
-            displayName: Publish Test Coverage
+            displayName: Publish Test Coverage Report
 
-  - stage: Build
-    jobs:
-      - job: build
+      - job: Build
         container: node
         steps:
           - checkout: self
