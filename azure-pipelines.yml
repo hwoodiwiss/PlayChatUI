@@ -40,6 +40,12 @@ stages:
               codeCoverageTool: "cobertura"
               summaryFileLocation: "**/cobertura-coverage.xml"
             displayName: Publish Test Coverage Report
+          - task: PowerShell@2
+            inputs:
+              targetType: filePath
+              filePath: "./CheckCoverage.ps1"
+              arguments: -coverageReportPath "./coverage/cobertura-coverage.xml" -coverageThreshold 75
+              pwsh: true
 
   - stage: Build
     jobs:
