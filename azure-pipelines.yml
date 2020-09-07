@@ -45,7 +45,7 @@ stages:
               targetType: filePath
               filePath: "./CheckCoverage.ps1"
               arguments: -coverageReportPath "./coverage/cobertura-coverage.xml" -coverageThreshold 75
-              pwsh: true
+            displayName: Check Coverage
 
   - stage: Build
     jobs:
