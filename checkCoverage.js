@@ -49,4 +49,6 @@ const params = {
   } catch (err) {
     throw new Error(`##vso[task.LogIssue type = error;]${err.message}`);
   }
-})();
+})().catch((err) => {
+  throw err;
+});
