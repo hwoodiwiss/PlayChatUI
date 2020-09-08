@@ -44,7 +44,6 @@ export class DeviceManagerService {
       })
       .catch((err) => {
         this.errors.push(err);
-        console.error(err);
       });
   }
 
