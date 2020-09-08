@@ -4,7 +4,7 @@ pool:
 resources:
   containers:
     - container: node
-      image: node:10
+      image: node:14.9.0
 
 trigger:
   - master
@@ -40,11 +40,7 @@ stages:
               codeCoverageTool: "cobertura"
               summaryFileLocation: "**/cobertura-coverage.xml"
             displayName: Publish Test Coverage Report
-          - task: PowerShell@2
-            inputs:
-              targetType: filePath
-              filePath: "./CheckCoverage.ps1"
-              arguments: -coverageReportPath "./coverage/cobertura-coverage.xml" -coverageThreshold 75
+          - script: yarn coverage
             displayName: Check Coverage
 
   - stage: Build
