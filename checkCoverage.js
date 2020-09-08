@@ -26,32 +26,27 @@ const params = {
   });
 
   if (!params.coverageReportPath) {
-    console.log("##vso[task.LogIssue type = error;]coverageReportPath is required");
-    return 1;
+    throw new Error("##vso[task.LogIssue type = error;]coverageReportPath is required");
   }
 
   if (!params.coverageThreshold) {
-    console.log("##vso[task.LogIssue type = error;]coverageThreshold is required");
-    return 1;
+    throw new Error("##vso[task.LogIssue type = error;]coverageThreshold is required");
   }
 
   let coverageReportBuffer = "";
   try {
     coverageReportBuffer = fs.readFileSync(params.coverageReportPath, "utf-8");
   } catch (err) {
-    console.log(`##vso[task.LogIssue type = error;]${err.message}`);
-    return 1;
+    throw new Error(`##vso[task.LogIssue type = error;]${err.message}`);
   }
 
   try {
     const coverageReport = await require("xml2js").parseStringPromise(coverageReportBuffer);
     const coveragePercentage = coverageReport["coverage"]["$"]["line-rate"] * 100;
     if (coveragePercentage < params.coverageThreshold) {
-      console.log(`##vso[task.LogIssue type = error;]Coverage percentage too low. Required: ${params.coverageThreshold} Coverage: ${coveragePercentage}`);
-      return 1;
+      throw new Error(`##vso[task.LogIssue type = error;]Coverage percentage too low. Required: ${params.coverageThreshold} Coverage: ${coveragePercentage}`);
     }
   } catch (err) {
-    console.log(`##vso[task.LogIssue type = error;]${err.message}`);
-    return 1;
+    throw new Error(`##vso[task.LogIssue type = error;]${err.message}`);
   }
 })();
