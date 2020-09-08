@@ -27,10 +27,9 @@ export class DeviceManagerService {
     return this.currentAudioOutputDevice;
   }
   public set CurrentAudioOutputDevice(device: AudioDevice) {
-    this.configurationService.getConfiguration().then((config) => {
-      config.audioOutputId = device?.deviceId;
-      this.configurationService.updateConfig();
-    });
+    const config = this.configurationService.getConfiguration();
+    config.audioOutputId = device?.deviceId;
+    this.configurationService.updateConfig();
     this.currentAudioOutputDevice = device;
   }
 

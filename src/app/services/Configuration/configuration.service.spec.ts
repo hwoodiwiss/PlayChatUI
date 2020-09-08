@@ -14,18 +14,18 @@ describe('ConfigurationService', () => {
     expect(service).toBeTruthy();
   });
 
-  it('getConfiguration should return cached config object if not null', async () => {
+  it('getConfiguration should return cached config object if not null', () => {
     const expectedConfig = {
       videoDeviceId: 'VidDev',
       audioInputId: 'AudInId',
       audioOutputId: 'AudOutId',
     };
     (service as any).config = expectedConfig;
-    const actualConfig = await service.getConfiguration();
+    const actualConfig = service.getConfiguration();
     expect(actualConfig).toEqual(expectedConfig);
   });
 
-  it('getConfiguration should return config from localStorage if config is null', async () => {
+  it('getConfiguration should return config from localStorage if config is null', () => {
     const expectedConfig = {
       videoDeviceId: 'VidDev',
       audioInputId: 'AudInId',
@@ -36,40 +36,40 @@ describe('ConfigurationService', () => {
 
     global.localStorage.setItem(CFG_KEY, expectedB64);
 
-    const actualConfig = await service.getConfiguration();
+    const actualConfig = service.getConfiguration();
     expect(actualConfig).toEqual(expectedConfig);
   });
 
-  it('getConfiguration should return empty object if no value is present in localStorage', async () => {
-    const actualConfig = await service.getConfiguration();
+  it('getConfiguration should return empty object if no value is present in localStorage', () => {
+    const actualConfig = service.getConfiguration();
     expect(actualConfig).toEqual({});
   });
 
-  it('getConfiguration should return empty object if value in localStorage is invalid base64', async () => {
+  it('getConfiguration should return empty object if value in localStorage is invalid base64', () => {
     const expectedB64 = 'asdf#][]';
 
     global.localStorage.setItem(CFG_KEY, expectedB64);
 
     const errorSpy = jest.spyOn(console, 'error');
 
-    const actualConfig = await service.getConfiguration();
+    const actualConfig = service.getConfiguration();
     expect(actualConfig).toEqual({});
     expect(errorSpy).toBeCalled();
   });
 
-  it('getConfiguration should return empty object if value in localStorage is invalid json', async () => {
+  it('getConfiguration should return empty object if value in localStorage is invalid json', () => {
     const expectedB64 = btoa('Some non-json value');
 
     global.localStorage.setItem(CFG_KEY, expectedB64);
 
     const errorSpy = jest.spyOn(console, 'error');
 
-    const actualConfig = await service.getConfiguration();
+    const actualConfig = service.getConfiguration();
     expect(actualConfig).toEqual({});
     expect(errorSpy).toBeCalled();
   });
 
-  it('updateConfig should store config to localStorage', async () => {
+  it('updateConfig should store config to localStorage', () => {
     const expectedConfig = {
       videoDeviceId: 'VidDev',
       audioInputId: 'AudInId',
@@ -85,7 +85,7 @@ describe('ConfigurationService', () => {
     expect(actualB64).toEqual(expectedB64);
   });
 
-  it('updateConfig should initialize config if it is falsy', async () => {
+  it('updateConfig should initialize config if it is falsy', () => {
     const expectedJson = JSON.stringify({});
     const expectedB64 = btoa(expectedJson);
     (service as any).config = undefined;
