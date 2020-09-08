@@ -26,12 +26,12 @@ process.argv.reduce((cmd, arg) => {
 
 if (!params.coverageReportPath) {
   console.log("##vso[task.LogIssue type=error;]coverageReportPath is required");
-  return 1;
+  process.exit(1);
 }
 
 if (!params.coverageThreshold) {
   console.log("##vso[task.LogIssue type=error;]coverageThreshold is required");
-  return 1;
+  process.exit(1);
 }
 
 let coverageReportBuffer = "";
@@ -39,7 +39,7 @@ try {
   coverageReportBuffer = fs.readFileSync(params.coverageReportPath, "utf-8");
 } catch (err) {
   console.log(`##vso[task.LogIssue type=error;]${err.message}`);
-  return 1;
+  process.exit(1);
 }
 
 let coverageReport = null;
@@ -52,11 +52,11 @@ require("xml2js").parseString(coverageReportBuffer, (error, result) => {
 
 if (parseError) {
   console.log(`##vso[task.LogIssue type=error;]${parseError}`);
-  return 1;
+  process.exit(1);
 }
 
 const coveragePercentage = coverageReport["coverage"]["$"]["line-rate"] * 100;
 if (coveragePercentage < params.coverageThreshold) {
   console.log(`##vso[task.LogIssue type=error;]Coverage percentage too low. Required: ${params.coverageThreshold} Coverage: ${coveragePercentage}`);
-  return 1;
+  process.exit(1);
 }
