@@ -5,6 +5,72 @@ import { ConfigurationService } from '../Configuration/configuration.service';
 import { VideoDevice, AudioDevice } from './mediaDevices';
 
 describe('DeviceManagerService', () => {
+  const testMediaDevices = [
+    {
+      deviceId: '1',
+      groupId: '1',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'AI1',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: 'default',
+      groupId: '1',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'Default - AI1',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: 'communications',
+      groupId: '1',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'Communications - AI1',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: '2',
+      groupId: '2',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'AI2',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: '1',
+      groupId: '1',
+      kind: 'audiooutput' as MediaDeviceKind,
+      label: 'AO1',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: 'default',
+      groupId: '1',
+      kind: 'audiooutput' as MediaDeviceKind,
+      label: 'Default - AO1',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: 'communications',
+      groupId: '1',
+      kind: 'audiooutput' as MediaDeviceKind,
+      label: 'Communications - AO2',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: '2',
+      groupId: '2',
+      kind: 'audiooutput' as MediaDeviceKind,
+      label: 'AO2',
+      toJSON: () => 'No',
+    },
+    {
+      deviceId: '1',
+      groupId: '1',
+      kind: 'videoinput' as MediaDeviceKind,
+      label: 'VI1',
+      toJSON: () => 'No',
+    },
+  ];
+
   const grantedPermissionState = { state: 'granted' };
   let service: DeviceManagerService;
   let mockConfigurationService = {
@@ -150,5 +216,25 @@ describe('DeviceManagerService', () => {
     service.ensureDevicePermissions().catch((reason) => {
       expect(reason).toBeTruthy();
     });
+  });
+
+  it('upateMediaDevices populates the three device arrays', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
+    await service[updateMediaDevicesKey]();
+
+    const audioInputs = service.getAudioInputDeviceInfo();
+    expect(audioInputs).toHaveLength(2);
+    expect(audioInputs[0].deviceId).toBe('1');
+    expect(audioInputs[0].isDefault).toBe(true);
+    expect(audioInputs[0].isCommunicationDefault).toBe(true);
+    expect(audioInputs[1].deviceId).toBe('2');
+    expect(audioInputs[1].isDefault).toBe(false);
+    expect(audioInputs[1].isCommunicationDefault).toBe(false);
+
+    const audioOutputs = service.getAudioOutputDeviceInfo();
+    expect(audioOutputs).toHaveLength(2);
+    const videoInputs = service.getVideoDeviceInfo();
+    expect(videoInputs).toHaveLength(1);
   });
 });
