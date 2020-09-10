@@ -3,6 +3,7 @@ const fs = require("fs");
 const params = {
   coverageReportPath: null,
   coverageThreshold: null,
+  branchCoverageThreshold: null,
 };
 
 process.argv.reduce((cmd, arg) => {
@@ -55,8 +56,15 @@ if (parseError) {
   process.exit(1);
 }
 
-const coveragePercentage = coverageReport["coverage"]["$"]["line-rate"] * 100;
-if (coveragePercentage < params.coverageThreshold) {
-  console.log(`##vso[task.LogIssue type=error;]Coverage percentage too low. Required: ${params.coverageThreshold} Coverage: ${coveragePercentage}`);
+const lineCoveragePercentage = coverageReport["coverage"]["$"]["line-rate"] * 100;
+if (lineCoveragePercentage < params.coverageThreshold) {
+  console.log(`##vso[task.LogIssue type=error;]Line coverage percentage too low. Required: ${params.coverageThreshold} Coverage: ${lineCoveragePercentage}`);
+  process.exit(1);
+}
+
+const branchCoveragePercentage = coverageReport["coverage"]["$"]["branch-rate"] * 100;
+const branchThreshold = params.branchCoverageThreshold || params.coverageThreshold;
+if (branchCoveragePercentage < branchThreshold) {
+  console.log(`##vso[task.LogIssue type=error;]Branch coverage percentage too low. Required: ${branchThreshold} Coverage: ${branchCoveragePercentage}`);
   process.exit(1);
 }

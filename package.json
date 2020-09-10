@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "coverage": "node ./checkCoverage.js --coverageReportPath ./coverage/cobertura-coverage.xml --coverageThreshold 75"
+    "coverage": "node ./checkCoverage.js --coverageReportPath ./coverage/cobertura-coverage.xml --coverageThreshold 75 --branchCoverageThreshold 85"
   },
   "private": true,
   "dependencies": {
