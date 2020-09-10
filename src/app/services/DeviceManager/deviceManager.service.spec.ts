@@ -5,6 +5,7 @@ import { ConfigurationService } from '../Configuration/configuration.service';
 import { VideoDevice, AudioDevice } from './mediaDevices';
 
 describe('DeviceManagerService', () => {
+  const grantedPermissionState = { state: 'granted' };
   let service: DeviceManagerService;
   let mockConfigurationService = {
     getConfiguration: jest.fn(),
@@ -113,7 +114,7 @@ describe('DeviceManagerService', () => {
   it('ctor should catch errors and add to errors array', async () => {
     const permissionStatus = { state: 'denied' };
     mockPermissions.query.mockReturnValue(permissionStatus);
-    const ctorService = await new DeviceManagerService(mockConfigurationService as any);
+    const ctorService = new DeviceManagerService(mockConfigurationService as any);
     expect((ctorService as any).errors).toHaveLength(1);
   });
 
@@ -126,8 +127,25 @@ describe('DeviceManagerService', () => {
   });
 
   it('ensureDevicePermissions should throw if mic permission request ignored', () => {
-    const permissionStatus = { state: 'denied' };
+    const permissionStatus = { state: 'prompt' };
     mockPermissions.query.mockReturnValue(permissionStatus);
+    mockMediaDevices.getUserMedia.mockRejectedValue('no');
+    service.ensureDevicePermissions().catch((reason) => {
+      expect(reason).toBeTruthy();
+    });
+  });
+
+  it('ensureDevicePermissions should throw if camera permission denied', () => {
+    const permissionStatus = { state: 'denied' };
+    mockPermissions.query.mockReturnValueOnce(grantedPermissionState).mockReturnValue(permissionStatus);
+    service.ensureDevicePermissions().catch((reason) => {
+      expect(reason).toBeTruthy();
+    });
+  });
+
+  it('ensureDevicePermissions should throw if camera permission request ignored', () => {
+    const permissionStatus = { state: 'prompt' };
+    mockPermissions.query.mockReturnValueOnce(grantedPermissionState).mockReturnValue(permissionStatus);
     mockMediaDevices.getUserMedia.mockRejectedValue('no');
     service.ensureDevicePermissions().catch((reason) => {
       expect(reason).toBeTruthy();
