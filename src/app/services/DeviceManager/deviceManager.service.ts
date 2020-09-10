@@ -148,9 +148,4 @@ export class DeviceManagerService {
   public getVideoDeviceInfo = () => [...this.videoDevices.values()];
   public getAudioInputDeviceInfo = () => [...this.audioInputDevices.values()];
   public getAudioOutputDeviceInfo = () => [...this.audioOutputDevices.values()];
-
-  public setCurrentAudioOutput(deviceId: string): void {
-    const device = this.audioOutputDevices.first((k, v) => v.deviceId === deviceId)?.value;
-    this.CurrentAudioOutputDevice = device;
-  }
 }
