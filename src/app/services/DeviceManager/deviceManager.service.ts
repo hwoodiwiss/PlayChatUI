@@ -39,8 +39,8 @@ export class DeviceManagerService {
 
   async init(): Promise<void> {
     this.ensureDevicePermissions()
-      .then(() => {
-        this.updateMediaDevices();
+      .then(async () => {
+        await this.updateMediaDevices();
       })
       .catch((err) => {
         this.errors.push(err);
@@ -75,66 +75,57 @@ export class DeviceManagerService {
     }
   }
 
-  private updateMediaDevices(): void {
-    navigator.mediaDevices.enumerateDevices().then((devices) => {
-      const audioInputs: MediaDeviceInfo[] = [];
-      const audioOutputs: MediaDeviceInfo[] = [];
+  private async updateMediaDevices(): Promise<void> {
+    const devices = await navigator.mediaDevices.enumerateDevices();
+    const audioInputs: MediaDeviceInfo[] = [];
+    const audioOutputs: MediaDeviceInfo[] = [];
 
-      for (const device of devices) {
-        if (device.kind === 'videoinput') {
-          this.videoDevices.set(device.deviceId, new VideoDevice(device));
-        } else if (device.kind === 'audioinput') {
-          audioInputs.push(device);
-          if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
-            this.audioInputDevices.set(device.deviceId, new AudioDevice(device));
-          }
-        } else if (device.kind === 'audiooutput') {
-          audioOutputs.push(device);
-          if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
-            this.audioOutputDevices.set(device.deviceId, new AudioDevice(device));
-          }
+    for (const device of devices) {
+      if (device.kind === 'videoinput') {
+        this.videoDevices.set(device.deviceId, new VideoDevice(device));
+      } else if (device.kind === 'audioinput') {
+        audioInputs.push(device);
+        if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
+          this.audioInputDevices.set(device.deviceId, new AudioDevice(device));
+        }
+      } else if (device.kind === 'audiooutput') {
+        audioOutputs.push(device);
+        if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
+          this.audioOutputDevices.set(device.deviceId, new AudioDevice(device));
         }
       }
-      this.setDefaultAudioDevices(audioInputs, this.audioInputDevices);
-      this.setDefaultAudioDevices(audioOutputs, this.audioOutputDevices);
-      const config = this.configurationService.getConfiguration();
-      if (config.videoDeviceId) {
-        this.currentVideoDevice = this.videoDevices.find((item) => item[1].deviceId === config.videoDeviceId).value;
-      }
+    }
+    this.setDefaultAudioDevices(audioInputs, this.audioInputDevices);
+    this.setDefaultAudioDevices(audioOutputs, this.audioOutputDevices);
+    const config = this.configurationService.getConfiguration();
+    if (config.videoDeviceId) {
+      this.currentVideoDevice = this.videoDevices.find((item) => item[1].deviceId === config.videoDeviceId).value;
+    }
 
-      if (config.audioInputId) {
-        this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].deviceId === config.audioInputId).value;
-      }
+    if (config.audioInputId) {
+      this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].deviceId === config.audioInputId).value;
+    }
 
-      if (config.audioOutputId) {
-        this.currentAudioOutputDevice = this.audioOutputDevices.find((item) => item[1].deviceId === config.audioOutputId).value;
-      }
+    if (config.audioOutputId) {
+      this.currentAudioOutputDevice = this.audioOutputDevices.find((item) => item[1].deviceId === config.audioOutputId).value;
+    }
 
-      if (!this.currentVideoDevice) {
-        this.currentVideoDevice = this.videoDevices.find().value;
-      }
+    if (!this.currentVideoDevice) {
+      this.currentVideoDevice = this.videoDevices.find().value;
+    }
 
-      if (!this.currentAudioInputDevice) {
-        this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].isCommunicationDefault === true).value ?? this.audioInputDevices.find().value;
-      }
+    if (!this.currentAudioInputDevice) {
+      this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioInputDevices.find().value;
+    }
 
-      if (!this.currentAudioOutputDevice) {
-        this.currentAudioOutputDevice =
-          this.audioOutputDevices.find((item) => item[1].isCommunicationDefault === true).value ?? this.audioOutputDevices.find().value;
-      }
-    });
+    if (!this.currentAudioOutputDevice) {
+      this.currentAudioOutputDevice = this.audioOutputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioOutputDevices.find().value;
+    }
   }
 
   private setDefaultAudioDevices(devices: MediaDeviceInfo[], audioDeviceMap: Map<string, AudioDevice>): void {
-    const defaultDeviceName = devices
-      .filter((w) => w.deviceId === 'default')
-      .map((s) => s.label)[0]
-      .substr('Default - '.length);
-    const defaultComsDeviceName = devices
-      .filter((w) => w.deviceId === 'communications')
-      .map((s) => s.label)[0]
-      .substr('Communications - '.length);
-
+    const defaultDeviceName = devices.filter((w) => w.deviceId === 'default').map((s) => s.label.substr('Default - '.length))[0];
+    const defaultComsDeviceName = devices.filter((w) => w.deviceId === 'communications').map((s) => s.label.substr('Communications - '.length))[0];
     const defaultDevice = audioDeviceMap.find((item) => item[1].deviceLabel === defaultDeviceName);
     if (defaultDevice) {
       defaultDevice.value.isDefault = true;
