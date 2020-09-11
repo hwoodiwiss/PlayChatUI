@@ -69,6 +69,13 @@ describe('DeviceManagerService', () => {
       label: 'VI1',
       toJSON: () => 'No',
     },
+    {
+      deviceId: '2',
+      groupId: '1',
+      kind: 'videoinput' as MediaDeviceKind,
+      label: 'VI2',
+      toJSON: () => 'No',
+    },
   ];
 
   const grantedPermissionState = { state: 'granted' };
@@ -177,11 +184,25 @@ describe('DeviceManagerService', () => {
     expect(testConfig.audioOutputId).toBe(expectedDeviceId);
   });
 
-  it('ctor should catch errors and add to errors array', async () => {
+  it('ctor should call init', () => {
+    const initSpy = jest.spyOn(DeviceManagerService.prototype, 'init');
+    const ctorService = new DeviceManagerService(mockConfigurationService as any);
+    expect(initSpy).toBeCalled();
+  });
+
+  it('init should updateDeviceArrays if ensureDevicePermissions is success', async () => {
+    service.ensureDevicePermissions = jest.fn();
+    (service.ensureDevicePermissions as jest.Mock<any, any>).mockResolvedValue(null);
+    (service as any).updateMediaDevices = jest.fn();
+    await service.init();
+    expect((service as any).updateMediaDevices).toBeCalled();
+  });
+
+  it('init should catch errors and add to errors array', async () => {
     const permissionStatus = { state: 'denied' };
     mockPermissions.query.mockReturnValue(permissionStatus);
-    const ctorService = new DeviceManagerService(mockConfigurationService as any);
-    expect((ctorService as any).errors).toHaveLength(1);
+    await service.init();
+    expect((service as any).errors).toHaveLength(1);
   });
 
   it('ensureDevicePermissions should throw if mic permission denied', () => {
@@ -203,7 +224,7 @@ describe('DeviceManagerService', () => {
 
   it('ensureDevicePermissions should throw if camera permission denied', () => {
     const permissionStatus = { state: 'denied' };
-    mockPermissions.query.mockReturnValueOnce(grantedPermissionState).mockReturnValue(permissionStatus);
+    mockPermissions.query.mockReturnValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
     service.ensureDevicePermissions().catch((reason) => {
       expect(reason).toBeTruthy();
     });
@@ -211,7 +232,7 @@ describe('DeviceManagerService', () => {
 
   it('ensureDevicePermissions should throw if camera permission request ignored', () => {
     const permissionStatus = { state: 'prompt' };
-    mockPermissions.query.mockReturnValueOnce(grantedPermissionState).mockReturnValue(permissionStatus);
+    mockPermissions.query.mockReturnValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
     mockMediaDevices.getUserMedia.mockRejectedValue('no');
     service.ensureDevicePermissions().catch((reason) => {
       expect(reason).toBeTruthy();
@@ -234,7 +255,68 @@ describe('DeviceManagerService', () => {
 
     const audioOutputs = service.getAudioOutputDeviceInfo();
     expect(audioOutputs).toHaveLength(2);
+    expect(audioOutputs[0].deviceId).toBe('1');
+    expect(audioOutputs[0].isDefault).toBe(true);
+    expect(audioOutputs[0].isCommunicationDefault).toBe(false);
+    expect(audioOutputs[1].deviceId).toBe('2');
+    expect(audioOutputs[1].isDefault).toBe(false);
+    expect(audioOutputs[1].isCommunicationDefault).toBe(true);
+
     const videoInputs = service.getVideoDeviceInfo();
-    expect(videoInputs).toHaveLength(1);
+    expect(videoInputs).toHaveLength(2);
+    expect(videoInputs[0].deviceName).toBe('VI1');
+    expect(videoInputs[1].deviceName).toBe('VI2');
+  });
+
+  it('updateMediaDevices sets the current audio devices to the audio device matching id in config', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    const testConfig = {
+      audioInputId: '2',
+      audioOutputId: '1',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
+    await service[updateMediaDevicesKey]();
+    expect(service.CurrentAudioInputDevice.deviceId).toBe('2');
+    expect(service.CurrentAudioOutputDevice.deviceId).toBe('1');
+  });
+
+  it('updateMediaDevices sets the current video device to the video device matching id in config', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    const testConfig = {
+      videoDeviceId: '2',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
+    await service[updateMediaDevicesKey]();
+    expect(service.CurrentVideoDevice.deviceId).toBe('2');
+  });
+
+  it('updateMediaDevices sets the current audio devices to communication defaults if config is empty', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    const testConfig = {
+      audioOutputId: null,
+      audioInputId: null,
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
+    await service[updateMediaDevicesKey]();
+    expect(service.CurrentAudioInputDevice.deviceId).toBe('1');
+    expect(service.CurrentAudioOutputDevice.deviceId).toBe('2');
+  });
+
+  it('updateMediaDevices sets the current video device to the first in the videoDevices collection if config is empty', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    const testConfig = {
+      videoDeviceId: null,
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
+    await service[updateMediaDevicesKey]();
+    expect(service.CurrentVideoDevice.deviceId).toBe('1');
   });
 });
