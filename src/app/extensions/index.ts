@@ -1,2 +1,1 @@
-import './Map'
-import './Array'
+import './Map';

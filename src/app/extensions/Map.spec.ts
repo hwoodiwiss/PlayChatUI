@@ -13,8 +13,8 @@ describe('Map', () => {
     map.set(7, 'seven');
   });
 
-  it('where should only return values that match the predicate expression', () => {
-    const result = map.where((k, v) => k < 4);
+  it('filter should only return values that match the predicate expression', () => {
+    const result = map.filter((item) => item[0] < 4);
     expect(result.size).toBe(3);
     expect(result).toEqual(
       new Map([
@@ -25,29 +25,29 @@ describe('Map', () => {
     );
   });
 
-  it('first should return the first array entry if called without a predicate', () => {
-    const result = map.first();
+  it('find should return the first array entry if called without a predicate', () => {
+    const result = map.find();
     expect(result).toEqual({ key: 1, value: 'one' });
   });
 
-  it('first should return the first matching array entry if called with a predicate', () => {
-    const result = map.first((k, v) => k > 2);
+  it('find should return the first matching array entry if called with a predicate', () => {
+    const result = map.find((item) => item[0] > 2);
     expect(result).toEqual({ key: 3, value: 'three' });
   });
 
-  it('first should return undefined if the Map is empty', () => {
+  it('find should return undefined if the Map is empty', () => {
     map.clear();
-    const result = map.first((k, v) => k > 2);
+    const result = map.find((item) => item[0] > 2);
     expect(result).toEqual(undefined);
   });
 
-  it('first should return undefined if no items match the predicate', () => {
-    const result = map.first((k, v) => k > 7);
+  it('find should return undefined if no items match the predicate', () => {
+    const result = map.find((item) => item[0] > 7);
     expect(result).toEqual(undefined);
   });
 
-  it('select should return an array of the values returned by the passed predicate', () => {
-    const result = map.select((k, v) => `${k}. ${v}`);
+  it('map should return an array of the values returned by the passed predicate', () => {
+    const result = map.map((item) => `${item[0]}. ${item[1]}`);
     expect(result).toHaveLength(7);
     expect(result).toEqual(['1. one', '2. two', '3. three', '4. four', '5. five', '6. six', '7. seven']);
   });

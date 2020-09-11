@@ -1,5 +1,5 @@
 export class DeviceInfo {
-  private default: boolean;
+  private default = false;
 
   public set isDefault(value: boolean) {
     this.default = value;
@@ -8,7 +8,7 @@ export class DeviceInfo {
     return this.default;
   }
 
-  private communicationDefault: boolean;
+  private communicationDefault = false;
 
   public set isCommunicationDefault(value: boolean) {
     this.communicationDefault = value;

@@ -11,7 +11,7 @@ export class ConfigurationService {
 
   constructor() {}
 
-  async getConfiguration(): Promise<Configuration> {
+  getConfiguration(): Configuration {
     if (this.config) {
       return this.config;
     }
