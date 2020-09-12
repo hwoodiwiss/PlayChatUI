@@ -328,7 +328,7 @@ describe('DeviceManagerService', () => {
 
   it('ensureDevicePermissions should resolve if mic and camera permissions are granted', () => {
     mockPermissions.query.mockResolvedValue(grantedPermissionState);
-    expect(service.ensureDevicePermissions()).resolves.toBe(null);
+    expect(service.ensureDevicePermissions()).resolves.toBe(undefined);
   });
 
   it('updateMediaDevices ignores non-audioinput, audiooutput or video devices', async () => {
