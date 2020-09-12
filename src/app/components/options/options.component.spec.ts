@@ -50,6 +50,12 @@ describe('OptionsComponent', () => {
     expect(component.getAudioOutputDevices()).toBe(expectedValue);
   });
 
+  it('getVideoDevices will return deviceManager getVideoDeviceInfo', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.getVideoDeviceInfo.mockReturnValue(expectedValue);
+    expect(component.getVideoDevices()).toBe(expectedValue);
+  });
+
   it('getCurrentAudioInputDevice will return deviceManager CurrentAudioInputDevice', () => {
     const expectedValue = 'Test Return Value';
     mockDeviceManager.CurrentAudioInputDevice = expectedValue;
@@ -60,5 +66,11 @@ describe('OptionsComponent', () => {
     const expectedValue = 'Test Return Value';
     mockDeviceManager.CurrentAudioOutputDevice = expectedValue;
     expect(component.getCurrentAudioOutputDevice()).toBe(expectedValue);
+  });
+
+  it('getCurrentVideoDevice will return deviceManager CurrentVideoDevice', () => {
+    const expectedValue = 'Test Return Value';
+    mockDeviceManager.CurrentVideoDevice = expectedValue;
+    expect(component.getCurrentVideoDevice()).toBe(expectedValue);
   });
 });
