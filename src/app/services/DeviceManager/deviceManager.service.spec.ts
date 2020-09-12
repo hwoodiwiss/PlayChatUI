@@ -245,43 +245,66 @@ describe('DeviceManagerService', () => {
 
   it('init should catch errors and add to errors array', async () => {
     const permissionStatus = { state: 'denied' };
-    mockPermissions.query.mockReturnValue(permissionStatus);
+    mockPermissions.query.mockResolvedValue(permissionStatus);
     await service.init();
     expect((service as any).errors).toHaveLength(1);
   });
 
   it('ensureDevicePermissions should throw if mic permission denied', () => {
     const permissionStatus = { state: 'denied' };
-    mockPermissions.query.mockReturnValue(permissionStatus);
+    mockPermissions.query.mockResolvedValue(permissionStatus);
     service.ensureDevicePermissions().catch((reason) => {
-      expect(reason).toBeTruthy();
+      expect(reason).toEqual(new Error('This application requires mic access to function.'));
     });
   });
 
   it('ensureDevicePermissions should throw if mic permission request ignored', () => {
     const permissionStatus = { state: 'prompt' };
-    mockPermissions.query.mockReturnValue(permissionStatus);
-    mockMediaDevices.getUserMedia.mockRejectedValue('no');
+    mockPermissions.query.mockResolvedValue(permissionStatus);
+    mockMediaDevices.getUserMedia.mockRejectedValue(new Error('no'));
     service.ensureDevicePermissions().catch((reason) => {
-      expect(reason).toBeTruthy();
+      expect(reason).toEqual(new Error('This application requires mic access to function.'));
     });
   });
 
   it('ensureDevicePermissions should throw if camera permission denied', () => {
     const permissionStatus = { state: 'denied' };
-    mockPermissions.query.mockReturnValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
+    mockPermissions.query.mockResolvedValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
     service.ensureDevicePermissions().catch((reason) => {
-      expect(reason).toBeTruthy();
+      expect(reason).toEqual(new Error('This application requires camera access to function.'));
     });
   });
 
   it('ensureDevicePermissions should throw if camera permission request ignored', () => {
     const permissionStatus = { state: 'prompt' };
-    mockPermissions.query.mockReturnValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
-    mockMediaDevices.getUserMedia.mockRejectedValue('no');
+    mockPermissions.query.mockResolvedValue(permissionStatus).mockReturnValueOnce(grantedPermissionState);
+    mockMediaDevices.getUserMedia.mockRejectedValue(new Error('no'));
     service.ensureDevicePermissions().catch((reason) => {
-      expect(reason).toBeTruthy();
+      expect(reason).toEqual(new Error('This application requires camera access to function.'));
     });
+  });
+
+  it('ensureDevicePermissions should resolve if mic and camera permissions are granted', () => {
+    mockPermissions.query.mockResolvedValue(grantedPermissionState);
+    expect(service.ensureDevicePermissions()).resolves.toBe(null);
+  });
+
+  it('updateMediaDevices ignores non-audioinput, audiooutput or video devices', async () => {
+    const updateMediaDevicesKey = 'updateMediaDevices';
+    mockConfigurationService.getConfiguration.mockReturnValue({});
+    mockMediaDevices.enumerateDevices.mockResolvedValue([
+      {
+        deviceId: '2',
+        groupId: '1',
+        kind: 'invaliddevice',
+        label: 'VI2',
+        toJSON: () => 'No',
+      },
+    ]);
+    await service[updateMediaDevicesKey]();
+    expect(service.getAudioInputDeviceInfo().length).toBe(0);
+    expect(service.getAudioOutputDeviceInfo().length).toBe(0);
+    expect(service.getVideoDeviceInfo().length).toBe(0);
   });
 
   it('upateMediaDevices populates the three device arrays, and sets current device to default if no config is present', async () => {

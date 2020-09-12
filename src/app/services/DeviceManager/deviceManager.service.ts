@@ -111,15 +111,16 @@ export class DeviceManagerService {
     }
 
     if (!this.currentVideoDevice) {
-      this.currentVideoDevice = this.videoDevices.find().value;
+      this.currentVideoDevice = this.videoDevices.find()?.value;
     }
 
     if (!this.currentAudioInputDevice) {
-      this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioInputDevices.find().value;
+      this.currentAudioInputDevice = this.audioInputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioInputDevices.find()?.value;
     }
 
     if (!this.currentAudioOutputDevice) {
-      this.currentAudioOutputDevice = this.audioOutputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioOutputDevices.find().value;
+      this.currentAudioOutputDevice =
+        this.audioOutputDevices.find((item) => item[1].isCommunicationDefault === true)?.value ?? this.audioOutputDevices.find()?.value;
     }
   }
 
