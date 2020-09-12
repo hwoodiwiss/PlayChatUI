@@ -1,20 +1,23 @@
-<select>
+<select [(ngModel)]="selectedAudioInputId" (change)="updateAudioInput()">
   <option
     *ngFor="let device of getAudioInputDevices()"
-    value="{{ device.deviceId }}"
-    [selected]="device.deviceId === getCurrentAudioInputDevice().deviceId"
+    [value]="device.deviceId"
   >
     {{ device.deviceName }}
   </option>
 </select>
 
-<select [(ngModel)]="selectedAudioOutputId">
+<select [(ngModel)]="selectedAudioOutputId" (change)="updateAudioOutput()">
   <option
     *ngFor="let device of getAudioOutputDevices()"
-    value="{{ device.deviceId }}"
-    [ngValue]="device.deviceId"
-    [selected]="device.deviceId === getCurrentAudioOutputDevice().deviceId"
+    [value]="device.deviceId"
   >
+    {{ device.deviceName }}
+  </option>
+</select>
+
+<select [(ngModel)]="selectedVideoDeviceId" (change)="updateVideoDevice()">
+  <option *ngFor="let device of getVideoDevices()" [value]="device.deviceId">
     {{ device.deviceName }}
   </option>
 </select>
