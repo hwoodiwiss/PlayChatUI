@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { AudioDevice, VideoDevice } from './mediaDevices';
 import { ConfigurationService } from '../Configuration/configuration.service';
 import '../../extensions';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceManagerService {
+  private devicesChanged: Subject<void> = new Subject<void>();
   private videoDevices = new Map<string, VideoDevice>();
   private audioInputDevices = new Map<string, AudioDevice>();
   private audioOutputDevices = new Map<string, AudioDevice>();
@@ -53,10 +55,20 @@ export class DeviceManagerService {
     this.ensureDevicePermissions()
       .then(async () => {
         await this.updateMediaDevices();
+        navigator.mediaDevices.addEventListener('devicechange', this.deviceChangeHandler);
       })
       .catch((err) => {
         this.errors.push(err);
       });
+  }
+
+  private async deviceChangeHandler(): Promise<void> {
+    await this.updateMediaDevices();
+    this.devicesChanged.next();
+  }
+
+  onDevicesChanged(onChange: () => void): Subscription {
+    return this.devicesChanged.subscribe(onChange);
   }
 
   async ensureDevicePermissions(): Promise<void> {
