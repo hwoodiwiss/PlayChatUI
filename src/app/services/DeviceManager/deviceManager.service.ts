@@ -16,10 +16,22 @@ export class DeviceManagerService {
   public get CurrentVideoDevice(): VideoDevice {
     return this.currentVideoDevice;
   }
+  public set CurrentVideoDevice(device: VideoDevice) {
+    const config = this.configurationService.getConfiguration();
+    config.videoDeviceId = device.deviceId;
+    this.configurationService.updateConfig();
+    this.currentVideoDevice = device;
+  }
 
   private currentAudioInputDevice: AudioDevice;
   public get CurrentAudioInputDevice(): AudioDevice {
     return this.currentAudioInputDevice;
+  }
+  public set CurrentAudioInputDevice(device: AudioDevice) {
+    const config = this.configurationService.getConfiguration();
+    config.audioInputId = device.deviceId;
+    this.configurationService.updateConfig();
+    this.currentAudioInputDevice = device;
   }
 
   private currentAudioOutputDevice: AudioDevice;
@@ -75,7 +87,7 @@ export class DeviceManagerService {
     }
   }
 
-  private async updateMediaDevices(): Promise<void> {
+  async updateMediaDevices(): Promise<void> {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const audioInputs: MediaDeviceInfo[] = [];
     const audioOutputs: MediaDeviceInfo[] = [];
