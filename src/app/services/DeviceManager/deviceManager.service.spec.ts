@@ -229,6 +229,48 @@ describe('DeviceManagerService', () => {
     expect(testConfig.audioOutputId).toBe(expectedDeviceId);
   });
 
+  it('set CurrentAudioInputDevice should store the selected id in configuration', () => {
+    const testConfig = {
+      audioInputId: 'not set',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    const expectedDeviceId = 'TestDevice123';
+    const mediaDeviceInfo = {
+      deviceId: expectedDeviceId,
+      groupId: 'Test',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'TestLabel',
+      toJSON: () => 'No',
+    };
+    const expectedDevice = new AudioDevice(mediaDeviceInfo);
+    service.CurrentAudioInputDevice = expectedDevice;
+    expect(service.CurrentAudioInputDevice).toBe(expectedDevice);
+    expect(mockConfigurationService.updateConfig).toBeCalled();
+    expect(testConfig.audioInputId).toBe(expectedDeviceId);
+  });
+
+  it('set CurrentVideoDevice should store the selected id in configuration', () => {
+    const testConfig = {
+      videoDeviceId: 'not set',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    const expectedDeviceId = 'TestDevice123';
+    const mediaDeviceInfo = {
+      deviceId: expectedDeviceId,
+      groupId: 'Test',
+      kind: 'videodevice' as MediaDeviceKind,
+      label: 'TestLabel',
+      toJSON: () => 'No',
+    };
+    const expectedDevice = new VideoDevice(mediaDeviceInfo);
+    service.CurrentVideoDevice = expectedDevice;
+    expect(service.CurrentVideoDevice).toBe(expectedDevice);
+    expect(mockConfigurationService.updateConfig).toBeCalled();
+    expect(testConfig.videoDeviceId).toBe(expectedDeviceId);
+  });
+
   it('ctor should call init', () => {
     const initSpy = jest.spyOn(DeviceManagerService.prototype, 'init');
     const ctorService = new DeviceManagerService(mockConfigurationService as any);
