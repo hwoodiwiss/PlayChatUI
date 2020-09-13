@@ -1,1 +1,1 @@
-import './Map';
+import './Map/Map';
