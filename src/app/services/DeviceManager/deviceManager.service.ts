@@ -2,11 +2,13 @@ import { Injectable } from '@angular/core';
 import { AudioDevice, VideoDevice } from './mediaDevices';
 import { ConfigurationService } from '../Configuration/configuration.service';
 import '../../extensions';
+import { Subject, Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DeviceManagerService {
+  private devicesChanged: Subject<void> = new Subject<void>();
   private videoDevices = new Map<string, VideoDevice>();
   private audioInputDevices = new Map<string, AudioDevice>();
   private audioOutputDevices = new Map<string, AudioDevice>();
@@ -16,10 +18,22 @@ export class DeviceManagerService {
   public get CurrentVideoDevice(): VideoDevice {
     return this.currentVideoDevice;
   }
+  public set CurrentVideoDevice(device: VideoDevice) {
+    const config = this.configurationService.getConfiguration();
+    config.videoDeviceId = device.deviceId;
+    this.configurationService.updateConfig();
+    this.currentVideoDevice = device;
+  }
 
   private currentAudioInputDevice: AudioDevice;
   public get CurrentAudioInputDevice(): AudioDevice {
     return this.currentAudioInputDevice;
+  }
+  public set CurrentAudioInputDevice(device: AudioDevice) {
+    const config = this.configurationService.getConfiguration();
+    config.audioInputId = device.deviceId;
+    this.configurationService.updateConfig();
+    this.currentAudioInputDevice = device;
   }
 
   private currentAudioOutputDevice: AudioDevice;
@@ -41,10 +55,20 @@ export class DeviceManagerService {
     this.ensureDevicePermissions()
       .then(async () => {
         await this.updateMediaDevices();
+        navigator.mediaDevices.addEventListener('devicechange', this.deviceChangeHandler);
       })
       .catch((err) => {
         this.errors.push(err);
       });
+  }
+
+  private async deviceChangeHandler(): Promise<void> {
+    await this.updateMediaDevices();
+    this.devicesChanged.next();
+  }
+
+  onDevicesChanged(onChange: () => void): Subscription {
+    return this.devicesChanged.subscribe(onChange);
   }
 
   async ensureDevicePermissions(): Promise<void> {
@@ -75,7 +99,7 @@ export class DeviceManagerService {
     }
   }
 
-  private async updateMediaDevices(): Promise<void> {
+  async updateMediaDevices(): Promise<void> {
     const devices = await navigator.mediaDevices.enumerateDevices();
     const audioInputs: MediaDeviceInfo[] = [];
     const audioOutputs: MediaDeviceInfo[] = [];

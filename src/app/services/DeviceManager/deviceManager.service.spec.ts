@@ -135,6 +135,7 @@ describe('DeviceManagerService', () => {
   let mockMediaDevices = {
     getUserMedia: jest.fn(),
     enumerateDevices: jest.fn(),
+    addEventListener: jest.fn(),
   };
 
   beforeEach(() => {
@@ -148,6 +149,7 @@ describe('DeviceManagerService', () => {
     mockMediaDevices = {
       getUserMedia: jest.fn(),
       enumerateDevices: jest.fn(),
+      addEventListener: jest.fn(),
     };
     TestBed.configureTestingModule({
       providers: [
@@ -229,6 +231,48 @@ describe('DeviceManagerService', () => {
     expect(testConfig.audioOutputId).toBe(expectedDeviceId);
   });
 
+  it('set CurrentAudioInputDevice should store the selected id in configuration', () => {
+    const testConfig = {
+      audioInputId: 'not set',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    const expectedDeviceId = 'TestDevice123';
+    const mediaDeviceInfo = {
+      deviceId: expectedDeviceId,
+      groupId: 'Test',
+      kind: 'audioinput' as MediaDeviceKind,
+      label: 'TestLabel',
+      toJSON: () => 'No',
+    };
+    const expectedDevice = new AudioDevice(mediaDeviceInfo);
+    service.CurrentAudioInputDevice = expectedDevice;
+    expect(service.CurrentAudioInputDevice).toBe(expectedDevice);
+    expect(mockConfigurationService.updateConfig).toBeCalled();
+    expect(testConfig.audioInputId).toBe(expectedDeviceId);
+  });
+
+  it('set CurrentVideoDevice should store the selected id in configuration', () => {
+    const testConfig = {
+      videoDeviceId: 'not set',
+    };
+
+    mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
+    const expectedDeviceId = 'TestDevice123';
+    const mediaDeviceInfo = {
+      deviceId: expectedDeviceId,
+      groupId: 'Test',
+      kind: 'videodevice' as MediaDeviceKind,
+      label: 'TestLabel',
+      toJSON: () => 'No',
+    };
+    const expectedDevice = new VideoDevice(mediaDeviceInfo);
+    service.CurrentVideoDevice = expectedDevice;
+    expect(service.CurrentVideoDevice).toBe(expectedDevice);
+    expect(mockConfigurationService.updateConfig).toBeCalled();
+    expect(testConfig.videoDeviceId).toBe(expectedDeviceId);
+  });
+
   it('ctor should call init', () => {
     const initSpy = jest.spyOn(DeviceManagerService.prototype, 'init');
     const ctorService = new DeviceManagerService(mockConfigurationService as any);
@@ -286,7 +330,7 @@ describe('DeviceManagerService', () => {
 
   it('ensureDevicePermissions should resolve if mic and camera permissions are granted', () => {
     mockPermissions.query.mockResolvedValue(grantedPermissionState);
-    expect(service.ensureDevicePermissions()).resolves.toBe(null);
+    expect(service.ensureDevicePermissions()).resolves.toBe(undefined);
   });
 
   it('updateMediaDevices ignores non-audioinput, audiooutput or video devices', async () => {
@@ -370,7 +414,6 @@ describe('DeviceManagerService', () => {
   });
 
   it('updateMediaDevices sets the current audio devices to the audio device matching id in config', async () => {
-    const updateMediaDevicesKey = 'updateMediaDevices';
     const testConfig = {
       audioInputId: '2',
       audioOutputId: '1',
@@ -378,25 +421,23 @@ describe('DeviceManagerService', () => {
 
     mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
-    await service[updateMediaDevicesKey]();
+    await service.updateMediaDevices();
     expect(service.CurrentAudioInputDevice.deviceId).toBe('2');
     expect(service.CurrentAudioOutputDevice.deviceId).toBe('1');
   });
 
   it('updateMediaDevices sets the current video device to the video device matching id in config', async () => {
-    const updateMediaDevicesKey = 'updateMediaDevices';
     const testConfig = {
       videoDeviceId: '2',
     };
 
     mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
-    await service[updateMediaDevicesKey]();
+    await service.updateMediaDevices();
     expect(service.CurrentVideoDevice.deviceId).toBe('2');
   });
 
   it('updateMediaDevices sets the current audio devices to communication defaults if config is empty', async () => {
-    const updateMediaDevicesKey = 'updateMediaDevices';
     const testConfig = {
       audioOutputId: null,
       audioInputId: null,
@@ -404,20 +445,39 @@ describe('DeviceManagerService', () => {
 
     mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
-    await service[updateMediaDevicesKey]();
+    await service.updateMediaDevices();
     expect(service.CurrentAudioInputDevice.deviceId).toBe('1');
     expect(service.CurrentAudioOutputDevice.deviceId).toBe('2');
   });
 
   it('updateMediaDevices sets the current video device to the first in the videoDevices collection if config is empty', async () => {
-    const updateMediaDevicesKey = 'updateMediaDevices';
     const testConfig = {
       videoDeviceId: null,
     };
 
     mockConfigurationService.getConfiguration.mockReturnValue(testConfig);
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
-    await service[updateMediaDevicesKey]();
+    await service.updateMediaDevices();
     expect(service.CurrentVideoDevice.deviceId).toBe('1');
+  });
+
+  it('deviceChangeHandler will call updateMediaDevices then trigger next on DevicesChanged', async () => {
+    const devicesChangedKey = 'devicesChanged';
+    const deviceChangeHandlerKey = 'deviceChangeHandler';
+    service.updateMediaDevices = jest.fn();
+    const devicesChangedNextSpy = jest.spyOn(service[devicesChangedKey], 'next');
+    await service[deviceChangeHandlerKey]();
+    expect(service.updateMediaDevices).toBeCalled();
+    expect(devicesChangedNextSpy).toBeCalled();
+  });
+
+  it('onDevicesChanged should add a subbscriber function to devicesChanged', () => {
+    const devicesChangedKey = 'devicesChanged';
+    const devicesChangedSubSpy = jest.spyOn(service[devicesChangedKey], 'subscribe');
+    const expectedFunc = () => {
+      console.log('This is a test closure');
+    };
+    service.onDevicesChanged(expectedFunc);
+    expect(devicesChangedSubSpy).toBeCalledWith(expectedFunc);
   });
 });

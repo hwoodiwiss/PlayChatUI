@@ -9,14 +9,36 @@ import { AudioDevice } from 'src/app/services/DeviceManager/mediaDevices';
 })
 export class OptionsComponent implements OnInit {
   selectedAudioOutputId: string;
+  selectedAudioInputId: string;
+  selectedVideoDeviceId: string;
 
   constructor(private deviceManager: DeviceManagerService) {}
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    await this.deviceManager.updateMediaDevices();
+    this.selectedAudioInputId = this.deviceManager.CurrentAudioInputDevice?.deviceId;
+    this.selectedAudioOutputId = this.deviceManager.CurrentAudioOutputDevice?.deviceId;
+    this.selectedVideoDeviceId = this.deviceManager.CurrentVideoDevice?.deviceId;
+  }
 
   getAudioInputDevices = () => this.deviceManager.getAudioInputDeviceInfo();
   getCurrentAudioInputDevice = () => this.deviceManager.CurrentAudioInputDevice;
 
   getAudioOutputDevices = () => this.deviceManager.getAudioOutputDeviceInfo();
   getCurrentAudioOutputDevice = () => this.deviceManager.CurrentAudioOutputDevice;
+
+  getVideoDevices = () => this.deviceManager.getVideoDeviceInfo();
+  getCurrentVideoDevice = () => this.deviceManager.CurrentVideoDevice;
+
+  updateAudioInput(): void {
+    this.deviceManager.CurrentAudioInputDevice = this.deviceManager.getAudioInputDeviceInfo().find((s) => s.deviceId === this.selectedAudioInputId);
+  }
+
+  updateAudioOutput(): void {
+    this.deviceManager.CurrentAudioOutputDevice = this.deviceManager.getAudioOutputDeviceInfo().find((s) => s.deviceId === this.selectedAudioOutputId);
+  }
+
+  updateVideoDevice(): void {
+    this.deviceManager.CurrentVideoDevice = this.deviceManager.getVideoDeviceInfo().find((s) => s.deviceId === this.selectedVideoDeviceId);
+  }
 }
