@@ -7,27 +7,18 @@ import { DeviceManagerService } from '../../services/DeviceManager/deviceManager
 describe('OptionsComponent', () => {
   let component: OptionsComponent;
   let fixture: ComponentFixture<OptionsComponent>;
-  let mockDeviceManager = {
+  const mockDeviceManager = {
     updateMediaDevices: jest.fn(),
-    getVideoDeviceInfo: jest.fn(),
-    getAudioInputDeviceInfo: jest.fn(),
-    getAudioOutputDeviceInfo: jest.fn(),
+    getVideoDevices: jest.fn(),
+    getAudioInputDevices: jest.fn(),
+    getAudioOutputDevices: jest.fn(),
     CurrentAudioInputDevice: null,
     CurrentAudioOutputDevice: null,
     CurrentVideoDevice: null,
   };
 
   beforeEach(() => {
-    mockDeviceManager = {
-      updateMediaDevices: jest.fn(),
-      getVideoDeviceInfo: jest.fn(),
-      getAudioInputDeviceInfo: jest.fn(),
-      getAudioOutputDeviceInfo: jest.fn(),
-      CurrentAudioInputDevice: null,
-      CurrentAudioOutputDevice: null,
-      CurrentVideoDevice: null,
-    };
-
+    jest.clearAllMocks();
     TestBed.configureTestingModule({
       declarations: [OptionsComponent],
       imports: [FormsModule],
@@ -60,24 +51,6 @@ describe('OptionsComponent', () => {
     expect(component.selectedVideoDeviceId).toBe('video');
   });
 
-  it('getAudioInputDevices will return deviceManager getAudioInputDeviceInfo', () => {
-    const expectedValue = 'Test Return Value';
-    mockDeviceManager.getAudioInputDeviceInfo.mockReturnValue(expectedValue);
-    expect(component.getAudioInputDevices()).toBe(expectedValue);
-  });
-
-  it('getAudioOutputDevices will return deviceManager getAudioOutputDeviceInfo', () => {
-    const expectedValue = 'Test Return Value';
-    mockDeviceManager.getAudioOutputDeviceInfo.mockReturnValue(expectedValue);
-    expect(component.getAudioOutputDevices()).toBe(expectedValue);
-  });
-
-  it('getVideoDevices will return deviceManager getVideoDeviceInfo', () => {
-    const expectedValue = 'Test Return Value';
-    mockDeviceManager.getVideoDeviceInfo.mockReturnValue(expectedValue);
-    expect(component.getVideoDevices()).toBe(expectedValue);
-  });
-
   it('getCurrentAudioInputDevice will return deviceManager CurrentAudioInputDevice', () => {
     const expectedValue = 'Test Return Value';
     mockDeviceManager.CurrentAudioInputDevice = expectedValue;
@@ -99,7 +72,7 @@ describe('OptionsComponent', () => {
   it('updateAudioInput will set CurrentAudioInputDevice to be an input device with id matching selectedAudioInputId', () => {
     const expectedDevice = { deviceId: 'thisOne' };
     const inputDevices = [{ deviceId: 'notThis' }, expectedDevice];
-    mockDeviceManager.getAudioInputDeviceInfo.mockReturnValue(inputDevices);
+    mockDeviceManager.getAudioInputDevices.mockReturnValue(inputDevices);
     component.selectedAudioInputId = 'thisOne';
     component.updateAudioInput();
     expect(mockDeviceManager.CurrentAudioInputDevice).toBe(expectedDevice);
@@ -108,7 +81,7 @@ describe('OptionsComponent', () => {
   it('updateAudioOutput will set CurrentAudioOutputDevice to be an input device with id matching selectedAudioOutputId', () => {
     const expectedDevice = { deviceId: 'thisOne' };
     const outputDevices = [{ deviceId: 'notThis' }, expectedDevice];
-    mockDeviceManager.getAudioOutputDeviceInfo.mockReturnValue(outputDevices);
+    mockDeviceManager.getAudioOutputDevices.mockReturnValue(outputDevices);
     component.selectedAudioOutputId = 'thisOne';
     component.updateAudioOutput();
     expect(mockDeviceManager.CurrentAudioOutputDevice).toBe(expectedDevice);
@@ -117,7 +90,7 @@ describe('OptionsComponent', () => {
   it('updateVideoDevice will set CurrentVideoDevice to be an input device with id matching selectedVideoDeviceId', () => {
     const expectedDevice = { deviceId: 'thisOne' };
     const videoDevices = [{ deviceId: 'notThis' }, expectedDevice];
-    mockDeviceManager.getVideoDeviceInfo.mockReturnValue(videoDevices);
+    mockDeviceManager.getVideoDevices.mockReturnValue(videoDevices);
     component.selectedVideoDeviceId = 'thisOne';
     component.updateVideoDevice();
     expect(mockDeviceManager.CurrentVideoDevice).toBe(expectedDevice);

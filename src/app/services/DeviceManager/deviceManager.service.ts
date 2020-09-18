@@ -161,7 +161,7 @@ export class DeviceManagerService {
     }
   }
 
-  public getVideoDeviceInfo = () => [...this.videoDevices.values()];
-  public getAudioInputDeviceInfo = () => [...this.audioInputDevices.values()];
-  public getAudioOutputDeviceInfo = () => [...this.audioOutputDevices.values()];
+  public getVideoDevices = () => [...this.videoDevices.values()];
+  public getAudioInputDevices = () => [...this.audioInputDevices.values()];
+  public getAudioOutputDevices = () => [...this.audioOutputDevices.values()];
 }
