@@ -4,9 +4,9 @@ import { MeetingComponent } from './meeting.component';
 import { DeviceManagerService } from 'src/app/services/DeviceManager/deviceManager.service';
 
 const mockDeviceManager = {
-  getVideoDeviceInfo: jest.fn(),
-  getAudioInputDeviceInfo: jest.fn(),
-  getAudioOutputDeviceInfo: jest.fn(),
+  getVideoDevices: jest.fn(),
+  getAudioInputDevices: jest.fn(),
+  getAudioOutputDevices: jest.fn(),
   CurrentAudioInputDevice: null,
   CurrentAudioOutputDevice: null,
   CurrentVideoDevice: null,

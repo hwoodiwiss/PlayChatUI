@@ -346,9 +346,9 @@ describe('DeviceManagerService', () => {
       },
     ]);
     await service[updateMediaDevicesKey]();
-    expect(service.getAudioInputDeviceInfo().length).toBe(0);
-    expect(service.getAudioOutputDeviceInfo().length).toBe(0);
-    expect(service.getVideoDeviceInfo().length).toBe(0);
+    expect(service.getAudioInputDevices().length).toBe(0);
+    expect(service.getAudioOutputDevices().length).toBe(0);
+    expect(service.getVideoDevices().length).toBe(0);
   });
 
   it('upateMediaDevices populates the three device arrays, and sets current device to default if no config is present', async () => {
@@ -357,7 +357,7 @@ describe('DeviceManagerService', () => {
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevices);
     await service[updateMediaDevicesKey]();
 
-    const audioInputs = service.getAudioInputDeviceInfo();
+    const audioInputs = service.getAudioInputDevices();
     expect(audioInputs).toHaveLength(2);
     expect(audioInputs[0].deviceId).toBe('1');
     expect(audioInputs[0].isDefault).toBe(true);
@@ -366,7 +366,7 @@ describe('DeviceManagerService', () => {
     expect(audioInputs[1].isDefault).toBe(false);
     expect(audioInputs[1].isCommunicationDefault).toBe(false);
 
-    const audioOutputs = service.getAudioOutputDeviceInfo();
+    const audioOutputs = service.getAudioOutputDevices();
     expect(audioOutputs).toHaveLength(2);
     expect(audioOutputs[0].deviceId).toBe('1');
     expect(audioOutputs[0].isDefault).toBe(true);
@@ -375,7 +375,7 @@ describe('DeviceManagerService', () => {
     expect(audioOutputs[1].isDefault).toBe(false);
     expect(audioOutputs[1].isCommunicationDefault).toBe(true);
 
-    const videoInputs = service.getVideoDeviceInfo();
+    const videoInputs = service.getVideoDevices();
     expect(videoInputs).toHaveLength(2);
     expect(videoInputs[0].deviceName).toBe('VI1');
     expect(videoInputs[1].deviceName).toBe('VI2');
@@ -387,7 +387,7 @@ describe('DeviceManagerService', () => {
     mockMediaDevices.enumerateDevices.mockResolvedValue(testMediaDevicesNoDefaults);
     await service[updateMediaDevicesKey]();
 
-    const audioInputs = service.getAudioInputDeviceInfo();
+    const audioInputs = service.getAudioInputDevices();
     expect(audioInputs).toHaveLength(2);
     expect(audioInputs[0].deviceId).toBe('1');
     expect(audioInputs[0].isDefault).toBe(false);
@@ -397,7 +397,7 @@ describe('DeviceManagerService', () => {
     expect(audioInputs[1].isCommunicationDefault).toBe(false);
     expect(service.CurrentAudioInputDevice).toBe(audioInputs[0]);
 
-    const audioOutputs = service.getAudioOutputDeviceInfo();
+    const audioOutputs = service.getAudioOutputDevices();
     expect(audioOutputs).toHaveLength(2);
     expect(audioOutputs[0].deviceId).toBe('1');
     expect(audioOutputs[0].isDefault).toBe(false);
@@ -407,7 +407,7 @@ describe('DeviceManagerService', () => {
     expect(audioOutputs[1].isCommunicationDefault).toBe(false);
     expect(service.CurrentAudioOutputDevice).toBe(audioOutputs[0]);
 
-    const videoInputs = service.getVideoDeviceInfo();
+    const videoInputs = service.getVideoDevices();
     expect(videoInputs).toHaveLength(2);
     expect(videoInputs[0].deviceName).toBe('VI1');
     expect(videoInputs[1].deviceName).toBe('VI2');
