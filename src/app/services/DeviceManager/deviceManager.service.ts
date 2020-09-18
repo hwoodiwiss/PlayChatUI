@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AudioDevice, VideoDevice } from './mediaDevices';
+import { AudioInputDevice, AudioOutputDevice, VideoDevice } from './mediaDevices';
 import { ConfigurationService } from '../Configuration/configuration.service';
 import '../../extensions';
 import { Subject, Subscription } from 'rxjs';
@@ -10,8 +10,8 @@ import { Subject, Subscription } from 'rxjs';
 export class DeviceManagerService {
   private devicesChanged: Subject<void> = new Subject<void>();
   private videoDevices = new Map<string, VideoDevice>();
-  private audioInputDevices = new Map<string, AudioDevice>();
-  private audioOutputDevices = new Map<string, AudioDevice>();
+  private audioInputDevices = new Map<string, AudioInputDevice>();
+  private audioOutputDevices = new Map<string, AudioOutputDevice>();
   private errors: string[] = [];
 
   private currentVideoDevice: VideoDevice;
@@ -25,22 +25,22 @@ export class DeviceManagerService {
     this.currentVideoDevice = device;
   }
 
-  private currentAudioInputDevice: AudioDevice;
-  public get CurrentAudioInputDevice(): AudioDevice {
+  private currentAudioInputDevice: AudioInputDevice;
+  public get CurrentAudioInputDevice(): AudioInputDevice {
     return this.currentAudioInputDevice;
   }
-  public set CurrentAudioInputDevice(device: AudioDevice) {
+  public set CurrentAudioInputDevice(device: AudioInputDevice) {
     const config = this.configurationService.getConfiguration();
     config.audioInputId = device.deviceId;
     this.configurationService.updateConfig();
     this.currentAudioInputDevice = device;
   }
 
-  private currentAudioOutputDevice: AudioDevice;
-  public get CurrentAudioOutputDevice(): AudioDevice {
+  private currentAudioOutputDevice: AudioOutputDevice;
+  public get CurrentAudioOutputDevice(): AudioOutputDevice {
     return this.currentAudioOutputDevice;
   }
-  public set CurrentAudioOutputDevice(device: AudioDevice) {
+  public set CurrentAudioOutputDevice(device: AudioOutputDevice) {
     const config = this.configurationService.getConfiguration();
     config.audioOutputId = device.deviceId;
     this.configurationService.updateConfig();
@@ -110,12 +110,12 @@ export class DeviceManagerService {
       } else if (device.kind === 'audioinput') {
         audioInputs.push(device);
         if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
-          this.audioInputDevices.set(device.deviceId, new AudioDevice(device));
+          this.audioInputDevices.set(device.deviceId, new AudioInputDevice(device));
         }
       } else if (device.kind === 'audiooutput') {
         audioOutputs.push(device);
         if (device.deviceId !== 'default' && device.deviceId !== 'communications') {
-          this.audioOutputDevices.set(device.deviceId, new AudioDevice(device));
+          this.audioOutputDevices.set(device.deviceId, new AudioOutputDevice(device));
         }
       }
     }
@@ -148,7 +148,7 @@ export class DeviceManagerService {
     }
   }
 
-  private setDefaultAudioDevices(devices: MediaDeviceInfo[], audioDeviceMap: Map<string, AudioDevice>): void {
+  private setDefaultAudioDevices(devices: MediaDeviceInfo[], audioDeviceMap: Map<string, any>): void {
     const defaultDeviceName = devices.filter((w) => w.deviceId === 'default').map((s) => s.label.substr('Default - '.length))[0];
     const defaultComsDeviceName = devices.filter((w) => w.deviceId === 'communications').map((s) => s.label.substr('Communications - '.length))[0];
     const defaultDevice = audioDeviceMap.find((item) => item[1].deviceLabel === defaultDeviceName);
