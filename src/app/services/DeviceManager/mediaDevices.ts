@@ -1,4 +1,4 @@
-export class DeviceInfo {
+export class Device {
   private default = false;
 
   public set isDefault(value: boolean) {
@@ -21,7 +21,7 @@ export class DeviceInfo {
   public readonly deviceName: string;
   public readonly deviceId: string;
 
-  constructor(private mediaDeviceInfo: MediaDeviceInfo) {
+  constructor(protected mediaDeviceInfo: MediaDeviceInfo) {
     this.deviceLabel = mediaDeviceInfo.label;
     this.deviceName = this.parseDeviceName(mediaDeviceInfo.label);
     this.deviceId = mediaDeviceInfo.deviceId;
@@ -32,6 +32,11 @@ export class DeviceInfo {
   }
 }
 
-export class VideoDevice extends DeviceInfo {}
+export class VideoDevice extends Device {
+  async getVideoStream(width: number, height: number): Promise<MediaStream> {
+    return navigator.mediaDevices.getUserMedia({ video: { advanced: [{ width, height }] } });
+  }
+}
 
-export class AudioDevice extends DeviceInfo {}
+export class AudioOutputDevice extends Device {}
+export class AudioInputDevice extends Device {}
