@@ -34,7 +34,7 @@ export class Device {
 
 export class VideoDevice extends Device {
   async getVideoStream(width: number, height: number): Promise<MediaStream> {
-    return navigator.mediaDevices.getUserMedia({ video: { advanced: [{ width, height }] } });
+    return navigator.mediaDevices.getUserMedia({ video: { advanced: [{ deviceId: this.deviceId, width, height }] } });
   }
 }
 
