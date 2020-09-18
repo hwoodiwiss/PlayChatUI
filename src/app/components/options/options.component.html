@@ -1,6 +1,6 @@
 <select [(ngModel)]="selectedAudioInputId" (change)="updateAudioInput()">
   <option
-    *ngFor="let device of getAudioInputDevices()"
+    *ngFor="let device of deviceManager.getAudioInputDevices()"
     [value]="device.deviceId"
   >
     {{ device.deviceName }}
@@ -9,7 +9,7 @@
 
 <select [(ngModel)]="selectedAudioOutputId" (change)="updateAudioOutput()">
   <option
-    *ngFor="let device of getAudioOutputDevices()"
+    *ngFor="let device of deviceManager.getAudioOutputDevices()"
     [value]="device.deviceId"
   >
     {{ device.deviceName }}
@@ -17,7 +17,10 @@
 </select>
 
 <select [(ngModel)]="selectedVideoDeviceId" (change)="updateVideoDevice()">
-  <option *ngFor="let device of getVideoDevices()" [value]="device.deviceId">
+  <option
+    *ngFor="let device of deviceManager.getVideoDevices()"
+    [value]="device.deviceId"
+  >
     {{ device.deviceName }}
   </option>
 </select>
