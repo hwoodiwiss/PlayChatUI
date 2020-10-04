@@ -7,7 +7,11 @@ import { DeviceManagerService } from '../../services/DeviceManager/deviceManager
   styleUrls: ['./meeting.component.scss'],
 })
 export class MeetingComponent implements OnInit {
+  videoStream: MediaStream;
   constructor(public readonly deviceManager: DeviceManagerService) {}
 
-  ngOnInit(): void {}
+  async ngOnInit(): Promise<void> {
+    await this.deviceManager.updateMediaDevices();
+    this.videoStream = await this.deviceManager.CurrentVideoDevice.getVideoStream(1920, 1080);
+  }
 }

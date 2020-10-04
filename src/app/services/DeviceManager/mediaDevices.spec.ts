@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { DeviceInfo } from './mediaDevices';
+import { Device } from './mediaDevices';
 
 describe('DeviceInfo', () => {
   it('get isDefault will return the value of default', () => {
@@ -10,7 +10,7 @@ describe('DeviceInfo', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const mediaDevice = new DeviceInfo(mediaDeviceInfo);
+    const mediaDevice = new Device(mediaDeviceInfo);
     (mediaDevice as any).default = true;
     expect(mediaDevice.isDefault).toBe(true);
     (mediaDevice as any).default = false;
@@ -25,7 +25,7 @@ describe('DeviceInfo', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const mediaDevice = new DeviceInfo(mediaDeviceInfo);
+    const mediaDevice = new Device(mediaDeviceInfo);
     mediaDevice.isDefault = true;
     expect((mediaDevice as any).default).toBe(true);
     mediaDevice.isDefault = false;
@@ -40,7 +40,7 @@ describe('DeviceInfo', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const mediaDevice = new DeviceInfo(mediaDeviceInfo);
+    const mediaDevice = new Device(mediaDeviceInfo);
     (mediaDevice as any).communicationDefault = true;
     expect(mediaDevice.isCommunicationDefault).toBe(true);
     (mediaDevice as any).communicationDefault = false;
@@ -55,7 +55,7 @@ describe('DeviceInfo', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const mediaDevice = new DeviceInfo(mediaDeviceInfo);
+    const mediaDevice = new Device(mediaDeviceInfo);
     mediaDevice.isCommunicationDefault = true;
     expect((mediaDevice as any).communicationDefault).toBe(true);
     mediaDevice.isCommunicationDefault = false;
@@ -70,7 +70,7 @@ describe('DeviceInfo', () => {
       label: 'Test (1234:ABCD)',
       toJSON: () => 'No',
     };
-    const mediaDevice = new DeviceInfo(mediaDeviceInfo);
+    const mediaDevice = new Device(mediaDeviceInfo);
     expect(mediaDevice.deviceName).toBe('Test');
     expect(mediaDevice.deviceLabel).toBe(mediaDeviceInfo.label);
   });

@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { DeviceManagerService } from './deviceManager.service';
 import { ConfigurationService } from '../Configuration/configuration.service';
-import { VideoDevice, AudioDevice } from './mediaDevices';
+import { VideoDevice, AudioInputDevice, AudioOutputDevice } from './mediaDevices';
 
 describe('DeviceManagerService', () => {
   const testMediaDevices = [
@@ -190,7 +190,7 @@ describe('DeviceManagerService', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    (service as any).currentAudioInputDevice = new AudioDevice(mediaDeviceInfo);
+    (service as any).currentAudioInputDevice = new AudioInputDevice(mediaDeviceInfo);
     const actual = service.CurrentAudioInputDevice;
     expect(actual).toBeTruthy();
     expect(actual.deviceId).toBe('Test');
@@ -204,7 +204,7 @@ describe('DeviceManagerService', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    (service as any).currentAudioOutputDevice = new AudioDevice(mediaDeviceInfo);
+    (service as any).currentAudioOutputDevice = new AudioOutputDevice(mediaDeviceInfo);
     const actual = service.CurrentAudioOutputDevice;
     expect(actual).toBeTruthy();
     expect(actual.deviceId).toBe('Test');
@@ -224,7 +224,7 @@ describe('DeviceManagerService', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const expectedDevice = new AudioDevice(mediaDeviceInfo);
+    const expectedDevice = new AudioInputDevice(mediaDeviceInfo);
     service.CurrentAudioOutputDevice = expectedDevice;
     expect(service.CurrentAudioOutputDevice).toBe(expectedDevice);
     expect(mockConfigurationService.updateConfig).toBeCalled();
@@ -245,7 +245,7 @@ describe('DeviceManagerService', () => {
       label: 'TestLabel',
       toJSON: () => 'No',
     };
-    const expectedDevice = new AudioDevice(mediaDeviceInfo);
+    const expectedDevice = new AudioInputDevice(mediaDeviceInfo);
     service.CurrentAudioInputDevice = expectedDevice;
     expect(service.CurrentAudioInputDevice).toBe(expectedDevice);
     expect(mockConfigurationService.updateConfig).toBeCalled();

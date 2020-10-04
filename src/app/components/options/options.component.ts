@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DeviceManagerService } from 'src/app/services/DeviceManager/deviceManager.service';
-import { AudioDevice } from 'src/app/services/DeviceManager/mediaDevices';
 
 @Component({
   selector: 'pwui-options',
