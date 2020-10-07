@@ -10,5 +10,5 @@ module.exports = {
   },
   moduleFileExtensions: ["ts", "tsx", "js"],
   transformIgnorePatterns: ["node_modules/(?!(ol)/)"],
-  setupFilesAfterEnv: ["./setupJest.ts"],
+  setupFilesAfterEnv: ["./setupJest.ts", "./jestTypes.ts"],
 };
