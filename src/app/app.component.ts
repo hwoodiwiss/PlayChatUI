@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { DeviceManagerService } from './services/DeviceManager/deviceManager.service';
 
 @Component({
-  selector: 'app-root',
+  selector: 'pcui-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })

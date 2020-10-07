@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'pwui-video-player',
+  selector: 'pcui-video-player',
   templateUrl: './video-player.component.html',
   styleUrls: ['./video-player.component.scss'],
 })
