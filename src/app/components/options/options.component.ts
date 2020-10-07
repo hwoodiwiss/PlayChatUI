@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DeviceManagerService } from 'src/app/services/DeviceManager/deviceManager.service';
 
 @Component({
-  selector: 'pwui-options',
+  selector: 'pcui-options',
   templateUrl: './options.component.html',
   styleUrls: ['./options.component.scss'],
 })

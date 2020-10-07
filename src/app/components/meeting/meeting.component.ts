@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DeviceManagerService } from '../../services/DeviceManager/deviceManager.service';
 
 @Component({
-  selector: 'pwui-meeting',
+  selector: 'pcui-meeting',
   templateUrl: './meeting.component.html',
   styleUrls: ['./meeting.component.scss'],
 })
