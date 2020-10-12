@@ -4,7 +4,11 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class WebRTCService {
-  videoFeeds: MediaStream[];
-
-  constructor() {}
+  private remoteStreams: MediaStream[];
+  public get remoteVideoStreams(): MediaStream[] {
+    return this.remoteStreams.filter((f) => f.getVideoTracks().length > 0);
+  }
+  constructor() {
+    this.remoteStreams = [];
+  }
 }
