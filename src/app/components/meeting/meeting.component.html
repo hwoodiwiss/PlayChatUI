@@ -1,0 +1,11 @@
+<pcui-video-player
+  class="remoteVideoStreams"
+  *ngFor="let stream of webRTCService.remoteVideoStreams"
+  (videoStream)="(stream)"
+>
+</pcui-video-player>
+<pcui-video-player
+  class="userVideoStream"
+  (videoStream)="(videoStream)"
+  *ngIf="videoStream !== undefined"
+></pcui-video-player>
