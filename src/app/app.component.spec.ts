@@ -1,15 +1,14 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { AppComponent } from './app.component';
-import { OptionsComponent } from './components/options/options.component';
-import { MeetingComponent } from './components/meeting/meeting.component';
+import { MeetingModule } from './components/meeting/meeting.module';
 import { FormsModule } from '@angular/forms';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     TestBed.configureTestingModule({
-      imports: [RouterTestingModule, FormsModule],
-      declarations: [AppComponent, OptionsComponent, MeetingComponent],
+      imports: [RouterTestingModule, FormsModule, MeetingModule],
+      declarations: [AppComponent],
     }).compileComponents();
   });
 
