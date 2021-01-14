@@ -150,10 +150,10 @@
     ora "5.1.0"
     rxjs "6.6.3"
 
-"@angular/animations@~11.0.8":
-  version "11.0.8"
-  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-11.0.8.tgz#abb3a016bc9164176d1edfcbd2783cc3ba6f9ca3"
-  integrity sha512-LlKR5bO7WsykZGcPDnL7c4q2/eq2fqywD+KMw5FemGLI8mN1mnq30br9/8TgaFwY0Do1OTOUh1JSrn1ybQgTwA==
+"@angular/animations@~11.0.9":
+  version "11.0.9"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-11.0.9.tgz#fb8052f55aa2851ab375dcb99d8d59c34a03a745"
+  integrity sha512-/KsMBUbRTqp29CNLbRIe4/8IxWxhnbUUZWqULaySnRDDW/p2m4miPcFVSp4zjrDZPqdXSibDiCyTiWmQ5PTuKA==
   dependencies:
     tslib "^2.0.0"
 
@@ -226,10 +226,10 @@
   resolved "https://registry.yarnpkg.com/@angular/core/-/core-9.0.0.tgz#227dc53e1ac81824f998c6e76000b7efc522641e"
   integrity sha512-6Pxgsrf0qF9iFFqmIcWmjJGkkCaCm6V5QNnxMy2KloO3SDq6QuMVRbN9RtC8Urmo25LP+eZ6ZgYqFYpdD8Hd9w==
 
-"@angular/core@^11.0.8":
-  version "11.0.8"
-  resolved "https://registry.yarnpkg.com/@angular/core/-/core-11.0.8.tgz#cc4ffc5506b393bf851fd7b94760d2a66efeb47c"
-  integrity sha512-NRKCgOtPFKcJpjjSV0NKuoNaD6ZQ3RqXBm9JURbnjVLaTwtCJlQ9H3N/e+HZNw8Ha2TDFJoiYX+RY071cyTMHQ==
+"@angular/core@^11.0.9":
+  version "11.0.9"
+  resolved "https://registry.yarnpkg.com/@angular/core/-/core-11.0.9.tgz#5e509af2d2580a07f9ddfe3b99ce86ae67689daf"
+  integrity sha512-J0ff3UK2Cw7Z0eNLtUXrpMFvmmkvPPZWLYIwimyc1pZys7qsIVT6cy2ybGEOhbJgC6qt3fo0DoJV3pGXTalb8A==
   dependencies:
     tslib "^2.0.0"
 
