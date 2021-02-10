@@ -40,7 +40,7 @@
     "jest-preset-angular": "^8.3.2",
     "ts-node": "~9.1.1",
     "tslint": "~6.1.0",
-    "typescript": "~3.9.5",
+    "typescript": "~3.9.8",
     "xml2js": "^0.4.23"
   }
 }
