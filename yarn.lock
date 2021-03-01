@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@angular-builders/jest@^11.0.0":
-  version "11.0.0"
-  resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-11.0.0.tgz#9cbc71ad624fb41581390548b015a72a5b36173a"
-  integrity sha512-tK4KRhMRRqSSWdtS/comKuuGnLuZsWmKJuSQjpk+fAmye93wXi35/ozbmgvxNRpx4pOl/h3kB0oiAi78tkDF6g==
+"@angular-builders/jest@^11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@angular-builders/jest/-/jest-11.1.0.tgz#e904d7154f571f3691fdf0916356307795ba9d6a"
+  integrity sha512-p0OMhgRXsi44MtVDKGWQEin6RcUa34Gh3bb4z8oljM3JrLgUZb59oXB3GO9vpAcyL1QGCTb4l48PJD7xFAj7sg==
   dependencies:
     "@angular-devkit/architect" ">=0.1100.0 < 0.1200.0"
     "@angular-devkit/core" "^11.0.0"
